@@ -7,28 +7,23 @@
 
 I'm a researcher (Ph.D. Theoretical Physics, Cornell) focused on a unifying scientific challenge: **understanding and modeling the emergent phenomena that arise from complex, interacting systems.**
 
-My work explores how simple, local rules give rise to complex global behavior in two key domains:
-1.  **Quantum Physics:** Where the interactions of many electrons produce the emergent properties of molecules and materials.
-2.  **Artificial Intelligence:** Where the interactions of many autonomous agents or learning parameters produce emergent intelligence and coordinated action.
+My work applies a unified toolkit to navigate the vast, intractable search spaces inherent in these domains—from the quantum many-body problem to multi-agent artificial intelligence. I design and apply principled algorithms from three core areas:
 
-To navigate the vast, intractable search spaces inherent in these problems, my primary tool is **heuristic search**. I design and apply principled, informed algorithms to find optimal or near-optimal solutions efficiently, whether in the Hilbert space of a molecule or the decision space of a multi-robot team.
+1.  **Heuristic Search:** Creating informed strategies to prune immense state spaces, like the **Hilbert space of many-body quantum states** or the game tree of chess.
+2.  **Stochastic Methods:** Using Monte Carlo techniques to manage uncertainty and model high-dimensional systems.
+3.  **Reinforcement Learning:** Applying modern deep learning to discover effective policies from data.
 
-My current research applies this perspective to **Robotics** and **Fundamental AI**, with a focus on:
-- **Multi-Agent Systems:** Designing local agent rules that produce robust, emergent global intelligence.
-- **Decision-Making & Game AI:** Creating hybrid systems that combine exact tactical search with learned strategic heuristics.
-- **AI & Complex Systems:** Exploring the conceptual parallels between statistical mechanics and large-scale AI models.
+My current research applies this perspective to fundamental problems in **Robotics** and **AI**.
 
 ---
 
 ### 🚀 Featured Projects
 
-Here are some of the projects I've developed, exploring different facets of multi-agent coordination, planning, and intelligent control.
-
 | Project                                                          | Description                                                                                                                                              | Key Concepts                                                      |
 | :--------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------- |
 | 🛡️ **[multiagent-defense](https://github.com/aaholmes/multiagent-defense)** | A decentralized strategy for slower defenders to intercept a faster intruder, which uses A* search on a dynamic threat map to find the safest path to its goal. | `Game Theory` `Computational Geometry` `Adversarial AI`            |
-| ♟️ **[kingfisher-chess](https://github.com/aaholmes/kingfisher)** | A chess engine with a novel **Hierarchical Tactical MCTS**, which prioritizes deterministic mate-finding and tactical search before using a neural network for strategic evaluation. | `MCTS` `Heuristic Search` `Hybrid AI` `Neural Networks`           |
-| 🗺️ **[multiagent-pathplanning](https://github.com/aaholmes/multiagent-pathplanning)** | A complete, high-performance navigation stack combining Conflict-Based Search (CBS) for optimal global planning with ORCA for real-time local collision avoidance. | `A* Algorithm` `Constraint-Based Search` `ORCA`                   |
+| ♟️ **[tactical-mcts-chess](https://github.com/aaholmes/chess)** | A chess engine with a novel **Hierarchical Tactical MCTS**, which prioritizes deterministic mate-finding and tactical search before using a neural network for strategic evaluation. | `Monte Carlo Tree Search` `Heuristic Search` `Hybrid AI` `Neural Networks`           |
+| 🗺️ **[multiagent-pathplanning](https://github.com/aaholmes/multiagent-pathplanning)** | A complete, high-performance navigation stack combining Conflict-Based Search (CBS) for optimal global planning with Optimal Reciprocal Collison Avoidance (ORCA) for real-time local collision avoidance. | `A* Algorithm` `Conflict-Based Search` `Optimal Reciprocal Collison Avoidance`                   |
 | 🧭 **[multi-robot-exploration](https://github.com/aaholmes/multiagent-explore)** | A communication-aware algorithm for a team of robots to autonomously map an unknown environment using an "Iterative Boundary Trace & Coordinated Sweep" strategy. | `SLAM` `Frontier-Based Exploration` `Multi-Robot Coordination`    |
 
 ---
@@ -37,7 +32,7 @@ Here are some of the projects I've developed, exploring different facets of mult
 
 My Ph.D. work culminated in the **Rust Implementation of Semistochastic Quantum chemistry (RISQ)** package. This research introduced a new class of low-variance Monte Carlo methods that use a physically-motivated heuristic search to enable high-accuracy calculations on previously intractable quantum systems.
 
-* **Project Repository:** **[aaholmes/risq-chem](https://github.com/aaholmes/risq-chem)**
+* **Project Repository:** **[aaholmes/risq](https://github.com/aaholmes/risq)**
 * **Key Publications:** [Holmes et al., JCTC 2016](https://doi.org/10.1021/acs.jctc.6b00407) | [Sharma, Holmes et al., JCTC 2017](https://doi.org/10.1021/acs.jctc.6b01028)
 
 ---
