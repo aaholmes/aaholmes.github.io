@@ -19,6 +19,8 @@ My current research applies this perspective to fundamental problems in **Roboti
 
 ### 🚀 Featured Projects
 
+I believe in choosing the right tool for the job. Many of these projects follow a hybrid model: the core, performance-critical algorithms are implemented in **Rust 🦀**, with a high-level **Python 🐍** layer for simulation, visualization, and rapid prototyping.
+
 | Project                                                          | Description                                                                                                                                              | Key Concepts                                                      |
 | :--------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------- |
 | 🛡️ **[multiagent-defense](https://github.com/aaholmes/multiagent-defense)** | A decentralized strategy for slower defenders to intercept a faster intruder, which uses A* search on a dynamic threat map to find the safest path to its goal. | `Game Theory` `Computational Geometry` `Adversarial AI`            |
