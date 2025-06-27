@@ -5,13 +5,15 @@
   <a href="https://scholar.google.com/citations?user=K0CAVroAAAAJ" target="_blank"><img alt="Google Scholar" src="https://img.shields.io/badge/Google_Scholar-4285F4?style=for-the-badge&logo=google-scholar&logoColor=white" /></a>
 </p>
 
-I'm a researcher (Ph.D. Theoretical Physics, Cornell) focused on a unifying scientific challenge: **understanding and modeling the emergent phenomena that arise from complex, interacting systems.**
+I'm a researcher (Ph.D. Theoretical Physics, Cornell) interested in understanding and modeling the **emergent phenomena that arise from complex, interacting systems.**
 
-My work applies a unified toolkit to navigate the vast, intractable search spaces inherent in these domains—from the quantum many-body problem to multi-agent artificial intelligence. I design and apply principled algorithms from three core areas:
+To navigate the vast search spaces inherent in these problems - from quantum many-body physics to multi-agent AI - my core approach is to design and build **hybrid systems** that combine the strengths of different computational paradigms. This philosophy appears throughout my work:
 
-1.  **Heuristic Search:** Creating informed strategies to prune immense state spaces, like the **Hilbert space of many-body quantum states** or the game tree of chess.
-2.  **Stochastic Methods:** Using Monte Carlo techniques to manage uncertainty and model high-dimensional systems.
-3.  **Reinforcement Learning:** Applying modern deep learning to discover effective policies from data.
+* **Algorithmically:** I design systems that fuse different modes of computation to achieve superior performance. These include:
+  * **semistochastic** methods that combine deterministic calculations with Monte Carlo sampling to reduce variance
+  * **hierarchical search** algorithms (like in my chess engine) that blend classical alpha-beta search with Neural Network-based Monte Carlo Tree Search
+
+* **Architecturally:** I build these systems using the best tools for the job, implementing performance-critical algorithms in **Rust 🦀** and wrapping them in high-level **Python 🐍** for simulation, analysis, and rapid development.
 
 My current research applies this perspective to fundamental problems in **Robotics** and **AI**.
 
@@ -19,13 +21,11 @@ My current research applies this perspective to fundamental problems in **Roboti
 
 ### 🚀 Featured Projects
 
-I believe in choosing the right tool for the job. Many of these projects follow a hybrid model: the core, performance-critical algorithms are implemented in **Rust 🦀**, with a high-level **Python 🐍** layer for simulation, visualization, and rapid prototyping.
-
 | Project                                                          | Description                                                                                                                                              | Key Concepts                                                      |
 | :--------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------- |
 | 🛡️ **[multiagent-defense](https://github.com/aaholmes/multiagent-defense)** | A decentralized strategy for slower defenders to intercept a faster intruder, which uses A* search on a dynamic threat map to find the safest path to its goal. | `Game Theory` `Computational Geometry` `Adversarial AI`            |
 | ♟️ **[tactical-mcts-chess](https://github.com/aaholmes/chess)** | A chess engine with a novel **Hierarchical Tactical MCTS**, which prioritizes deterministic mate-finding and tactical search before using a neural network for strategic evaluation. | `Monte Carlo Tree Search` `Heuristic Search` `Hybrid AI` `Neural Networks`           |
-| 🗺️ **[multiagent-pathplanning](https://github.com/aaholmes/multiagent-pathplanning)** | A complete, high-performance navigation stack combining Conflict-Based Search (CBS) for optimal global planning with Optimal Reciprocal Collison Avoidance (ORCA) for real-time local collision avoidance. | `A* Algorithm` `Conflict-Based Search` `Optimal Reciprocal Collison Avoidance`                   |
+| 🗺️ **[multiagent-pathplanning](https://github.com/aaholmes/multiagent-pathplanning)** | A complete, high-performance navigation stack combining Conflict-Based Search (CBS) for optimal global planning with Optimal Reciprocal Collision Avoidance (ORCA) for real-time local collision avoidance. | `A* Algorithm` `Constraint-Based Search` `Optimal Reciprocal Collision Avoidance`                   |
 | 🧭 **[multi-robot-exploration](https://github.com/aaholmes/multiagent-explore)** | A communication-aware algorithm for a team of robots to autonomously map an unknown environment using an "Iterative Boundary Trace & Coordinated Sweep" strategy. | `SLAM` `Frontier-Based Exploration` `Multi-Robot Coordination`    |
 
 ---
