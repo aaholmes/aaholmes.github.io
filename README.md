@@ -10,8 +10,8 @@ I'm a researcher (Ph.D. Theoretical Physics, Cornell) interested in understandin
 To navigate the vast search spaces inherent in these problems - from quantum many-body physics to multi-agent AI - my core approach is to design and build **hybrid systems** that combine the strengths of different computational paradigms. This philosophy appears throughout my work:
 
 * **Algorithmically:** I design systems that fuse different modes of computation to achieve superior performance. These include:
-  * **semistochastic** methods that combine deterministic calculations with Monte Carlo sampling to reduce variance
-  * **hierarchical search** algorithms (like in my chess engine) that blend classical alpha-beta search with Neural Network-based Monte Carlo Tree Search
+  * **Semistochastic** methods that combine deterministic calculations with Monte Carlo sampling to reduce variance
+  * **Hierarchical Search** algorithms (like in my chess engine) that blend classical alpha-beta search with Neural Network-based Monte Carlo Tree Search
 
 * **Architecturally:** I build these systems using the best tools for the job, implementing performance-critical algorithms in **Rust 🦀** and wrapping them in high-level **Python 🐍** for simulation, analysis, and rapid development.
 
