@@ -33,7 +33,15 @@ My current research applies this perspective to fundamental problems in **Roboti
 
 My Ph.D. work culminated in the **Rust Implementation of Semistochastic Quantum chemistry (RISQ)** package. This research introduced a new class of low-variance Monte Carlo methods that use a physically-motivated heuristic search to enable high-accuracy calculations on previously intractable quantum systems.
 
-* **Project Repository:** **[aaholmes/risq](https://github.com/aaholmes/risq)**
+My Ph.D. research introduced a new family of quantum chemistry methods - **Heat-Bath Configuration Interaction (HCI)** and its successor, **Semistochastic HCI (SHCI)** - that significantly advanced the state-of-the-art in high-accuracy electronic structure calculations.   
+
+The core innovation was a paradigm shift in algorithm design. We replaced the inefficient "generate-then-test" approach of previous methods with a highly efficient "generate-only-the-important" strategy. This was accomplished with a novel deterministic heat-bath sampling algorithm that uses pre-sorted data to rapidly identify the most significant components of the quantum wavefunction, avoiding wasted computation on unimportant parts of the vast search space.   
+
+This breakthrough enabled calculations on a scale previously considered intractable. A key benchmark was solving the electronic structure of the chromium dimer ($`\text{Cr}_2`$), a notoriously difficult problem with a search space of $`2 \times 10^{22}`$ configurations. HCI achieved near-exact results in minutes on a single CPU core, matching the accuracy of the best competing methods like the Density Matrix Renormalization Group (DMRG).   
+
+The subsequent development of Semistochastic HCI (SHCI) solved the primary memory bottleneck of the original method, making it a practical and powerful tool for the broader community. Today, HCI/SHCI is recognized as a benchmark method in its own right and has been implemented in or interfaced with major quantum chemistry packages, including PySCF (via the Dice and Arrow codes) and Q-Chem. The core algorithmic ideas have also proven to be highly versatile, forming the basis for new methods in areas like large active-space calculations (HCISCF) and computational vibrational spectroscopy (VHCI). 
+
+* **Project Repository:** **[aaholmes/risq](https://github.com/aaholmes/risq)** (My personal Rust implementation)
 * **Key Publications:** [Holmes et al., JCTC 2016](https://doi.org/10.1021/acs.jctc.6b00407) | [Sharma, Holmes et al., JCTC 2017](https://doi.org/10.1021/acs.jctc.6b01028)
 
 ---
