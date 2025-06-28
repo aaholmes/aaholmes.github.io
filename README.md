@@ -31,8 +31,6 @@ My current research applies this perspective to fundamental problems in **Roboti
 
 ### 🔬 Foundational Research: RISQ
 
-My Ph.D. work culminated in the **Rust Implementation of Semistochastic Quantum chemistry (RISQ)** package. This research introduced a new class of low-variance Monte Carlo methods that use a physically-motivated heuristic search to enable high-accuracy calculations on previously intractable quantum systems.
-
 My Ph.D. research introduced a new family of quantum chemistry methods - **Heat-Bath Configuration Interaction (HCI)** and its successor, **Semistochastic HCI (SHCI)** - that significantly advanced the state-of-the-art in high-accuracy electronic structure calculations.   
 
 The core innovation was a paradigm shift in algorithm design. We replaced the inefficient "generate-then-test" approach of previous methods with a highly efficient "generate-only-the-important" strategy. This was accomplished with a novel deterministic heat-bath sampling algorithm that uses pre-sorted data to rapidly identify the most significant components of the quantum wavefunction, avoiding wasted computation on unimportant parts of the vast search space.   
