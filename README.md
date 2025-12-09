@@ -17,7 +17,7 @@ My expertise in designing algorithms for interacting quantum systems provides a 
 | :--- | :--- | :--- |
 | ♟️ **[Neurosymbolic Chess](https://github.com/aaholmes/hybrid-chess-engine)** | A neurosymbolic chess engine (Rust) that integrates MCTS with a state-dependent alpha-beta portfolio to solve the "cold start" inefficiency of pure RL. | `Rust` • `MCTS` • `PyTorch` |
 | ⚛️ **[Arrow (SHCI)](https://github.com/aaholmes/shci)** | **High-Performance Quantum Chemistry Engine.** The reference C++/MPI implementation of Semistochastic Heat-Bath CI. I currently lead maintenance and architectural extensions. | `C++` • `MPI` • `HPC` |
-| 🗺️ **[Multi-Agent Pathfinding](https://github.com/aaholmes/multiagent-pathplanning)** | A high-performance navigation stack combining Conflict-Based Search (CBS) for global optimality with ORCA for local avoidance. | `C++` • `OpenMP` • `MPI` |
+| 🗺️ **[Multi-Agent Pathfinding](https://github.com/aaholmes/multiagent-pathplanning)** | A navigation stack combining Conflict-Based Search (CBS) for global optimality with ORCA for local avoidance. | `CBS` • `ORCA` |
 | 🛡️ **[Adversarial Defense](https://github.com/aaholmes/multiagent-defense)** | A decentralized strategy for slower defenders to intercept a faster, intelligent intruder using Apollonian Circle geometry and game-theoretic control. | `Game Theory` • `Computational Geometry` |
 | 🧭 **[Multi-Robot Exploration](https://github.com/aaholmes/multiagent-explore)** | A communication-aware algorithm for a team of robots to autonomously map an unknown environment using an "Iterative Boundary Trace & Coordinated Sweep" strategy. | `SLAM` • `Frontier-Based Exploration` |
 
