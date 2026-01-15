@@ -4,21 +4,22 @@
   <a href="https://scholar.google.com/citations?user=K0CAVroAAAAJ" target="_blank" style="text-decoration:none;"><img alt="Google Scholar" src="https://img.shields.io/badge/Google_Scholar-4285F4?style=for-the-badge&logo=google-scholar&logoColor=white" /></a>
 </p>
 
-I am a **Research Engineer & Computational Physicist** (Ph.D. Theoretical Physics, Cornell) focused on **AI for Science** and **Neurosymbolic Systems**.
+I am a **Research Engineer & Computational Physicist** (Ph.D. Theoretical Physics, Cornell) focused on **efficient AI systems** and **neurosymbolic architectures**.
 
-My work centers on designing high-performance stochastic optimization algorithms (Rust/C++) that navigate vast search spaces efficiently—whether for finding the ground state of a molecule or the optimal move in a game. I specialize in building hybrid architectures that combine the reasoning of deterministic search with the intuition of neural networks.
+I build high-performance systems that navigate vast search spaces efficiently—whether sampling from a diffusion model, finding the ground state of a molecule, or computing the optimal move in a game. I deployed Transformer-based semantic search in production in 2018 (pre-BERT) and invented SHCI, a quantum chemistry method with 2,100+ citations.
 
 ---
-### **AI Systems & Agentic Research**
+### **AI Systems & Research**
 
-My expertise in designing algorithms for interacting quantum systems provides a unique perspective for modeling other complex systems. The following projects explore the application of these principles to challenges in Artificial Intelligence and Robotics.
+Current projects exploring efficient inference, neurosymbolic architectures, and multi-agent systems.
 
 | Project | Description | Tech Stack |
 | :--- | :--- | :--- |
+| 🌀 **[Diffusion LLM](https://github.com/aaholmes/diffusion-llm)** | Diffusion language model from scratch, exploring efficient inference for discrete sequence generation on edge hardware (Jetson Orin Nano). | `Python` • `PyTorch` • `Diffusion` |
 | ♟️ **[Neurosymbolic Chess](https://github.com/aaholmes/hybrid-chess-engine)** | A neurosymbolic chess engine (Rust) that integrates MCTS with a state-dependent alpha-beta portfolio to solve the "cold start" inefficiency of pure RL. | `Rust` • `MCTS` • `PyTorch` |
 | ⚛️ **[Arrow (SHCI)](https://github.com/aaholmes/shci)** | **High-Performance Quantum Chemistry Engine.** The reference C++/MPI implementation of Semistochastic Heat-Bath CI. I currently lead maintenance and architectural extensions. | `C++` • `MPI` • `HPC` |
-| 🗺️ **[Multi-Agent Pathfinding](https://github.com/aaholmes/multiagent-pathplanning)** | A navigation stack combining Conflict-Based Search (CBS) for global optimality with ORCA for local avoidance. | `CBS` • `ORCA` |
-| 🛡️ **[Adversarial Defense](https://github.com/aaholmes/multiagent-defense)** | A decentralized strategy for slower defenders to intercept a faster, intelligent intruder using Apollonian Circle geometry and game-theoretic control. | `Game Theory` • `Computational Geometry` |
+| 🗺️  **[Multi-Agent Pathfinding](https://github.com/aaholmes/multiagent-pathplanning)** | A navigation stack combining Conflict-Based Search (CBS) for global optimality with ORCA for local avoidance. | `CBS` • `ORCA` |
+| 🛡️  **[Adversarial Defense](https://github.com/aaholmes/multiagent-defense)** | A decentralized strategy for slower defenders to intercept a faster, intelligent intruder using Apollonian Circle geometry and game-theoretic control. | `Game Theory` • `Computational Geometry` |
 | 🧭 **[Multi-Robot Exploration](https://github.com/aaholmes/multiagent-explore)** | A communication-aware algorithm for a team of robots to autonomously map an unknown environment using an "Iterative Boundary Trace & Coordinated Sweep" strategy. | `SLAM` • `Frontier-Based Exploration` |
 
 ---
