@@ -4,6 +4,8 @@
   <a href="https://scholar.google.com/citations?user=K0CAVroAAAAJ" target="_blank" style="text-decoration:none;"><img alt="Google Scholar" src="https://img.shields.io/badge/Google_Scholar-4285F4?style=for-the-badge&logo=google-scholar&logoColor=white" /></a>
 </p>
 
+<img src="profile_pic.png" width="180" align="right" style="margin-left: 16px; border-radius: 50%;" />
+
 Hi! I'm a Computational Physicist and AI Researcher (Ph.D. Theoretical Physics, Cornell). I build accurate and efficient computational systems by combining paradigms: deterministic with stochastic, symbolic with neural, exact with approximate.
 
 This thread runs through all my work. In quantum chemistry, I combined deterministic wavefunction selection with stochastic perturbation theory to make exact calculations tractable at scale (SHCI, 2,100+ citations). Now I apply the same thinking to AI, pairing symbolic reasoning with learned neural components so that each handles what it's best at. I've been building production AI systems since 2018 (Transformer-based semantic search, pre-BERT), deployed my algorithms on some of the largest supercomputers in the world at Lawrence Livermore National Lab, and built quantitative models for systematic trading at Citadel.
