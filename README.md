@@ -4,7 +4,7 @@
   <a href="https://scholar.google.com/citations?user=K0CAVroAAAAJ" target="_blank" style="text-decoration:none;"><img alt="Google Scholar" src="https://img.shields.io/badge/Google_Scholar-4285F4?style=for-the-badge&logo=google-scholar&logoColor=white" /></a>
 </p>
 
-<img src="profile_pic.png" width="180" align="right" style="margin-left: 16px; border-radius: 50%;" />
+<img src="profile_pic.png" width="220" align="right" style="margin-left: 16px; border-radius: 50%;" />
 
 Hi! I'm a Computational Physicist and AI Researcher (Ph.D. Theoretical Physics, Cornell). I build accurate and efficient computational systems by combining paradigms: deterministic with stochastic, symbolic with neural, exact with approximate.
 
