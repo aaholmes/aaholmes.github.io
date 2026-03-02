@@ -15,8 +15,8 @@ This thread runs through all my work. In quantum chemistry, I combined determini
 
 | Project | Description | Tech |
 | :--- | :--- | :--- |
-| [Geometry Theorem Prover](https://github.com/aaholmes/geoprover) | Three-tier MCTS prover: symbolic deduction (49 rules to fixed point) short-circuits the search, while a 4M-parameter transformer suggests auxiliary constructions. Solves 189/231 problems on AlphaGeometry's JGEX benchmark, including Morley's theorem and the 9-point circle. | `Rust` `PyO3` `PyTorch` |
-| [Neurosymbolic Chess Engine](https://github.com/aaholmes/neurosymbolic-mcts) | Three-tier MCTS: exact mate detection and geometric pruning as terminal gates, material-aware quiescence search, and SE-ResNet neural evaluation. The symbolic tiers alone (zero-initialized NN) exceed 29 generations of pure neural self-play. 950 tests. | `Rust` `MCTS` `PyTorch` |
+| [Geometry Theorem Prover](https://github.com/aaholmes/geoprover) | Neurosymbolic prover that combines exhaustive symbolic deduction (49 rules to fixed point) with neural-guided MCTS over auxiliary constructions. A 4M-parameter transformer learns the creative step that deduction alone can't do. Solves 189/231 problems on AlphaGeometry's JGEX benchmark, including Morley's theorem and the 9-point circle. | `Rust` `PyO3` `PyTorch` |
+| [Neurosymbolic Chess Engine](https://github.com/aaholmes/neurosymbolic-mcts) | Chess engine where symbolic reasoning (mate search, material-aware quiescence search) gates neural evaluation. Symbolic knowledge dramatically accelerates learning: +600 Elo over the pure neural baseline (AlphaZero-style) in 20 vs 30 generations of self-play. | `Rust` `MCTS` `PyTorch` |
 
 ### Algorithms & Optimization
 
@@ -29,7 +29,7 @@ This thread runs through all my work. In quantum chemistry, I combined determini
 | Project | Description | Tech |
 | :--- | :--- | :--- |
 | [Arrow / SHCI](https://github.com/aaholmes/shci) | Reference implementation of Semistochastic Heat-Bath Configuration Interaction, the method I invented during my Ph.D. Combines deterministic selection of important wavefunction components with stochastic perturbative corrections. Hybrid MPI+OpenMP. | `C++` `MPI` `OpenMP` |
-| [RISQ](https://github.com/aaholmes/risq) | Rust reimplementation of HCI and semistochastic perturbation theory. Bitstring determinant representation, Davidson eigensolver, alias sampling for O(1) stochastic draws. | `Rust` |
+| [RISQ](https://github.com/aaholmes/risq) | Rust implementation of SHCI for near-exact electronic structure calculations. Bitstring determinant representation, Davidson eigensolver, and alias sampling for O(1) stochastic draws. | `Rust` |
 
 ---
 ### Foundational Research
