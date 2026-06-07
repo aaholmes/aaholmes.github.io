@@ -15,7 +15,7 @@ This thread runs through all my work. In quantum chemistry, I combined determini
 
 | Project | Description | Tech |
 | :--- | :--- | :--- |
-| [Activation Functions under Muon vs AdamW](https://aaholmes.github.io/nanogpt/) | Systematic study of activation functions and gated MLPs in a 124M-parameter GPT trained on FineWeb-10B. sniqu (self-normalized IQU) significantly outperforms ReLU² under Muon (p<0.0001, n=9, Δ=−0.076 nats). Gated MLPs reverse from a win under AdamW to a significant loss under Muon (p<0.05, Δ=+0.10–0.16 nats) — showing that activation rankings established under Adam-family optimizers do not reliably transfer to Muon. | `PyTorch` `NanoGPT` `Muon` |
+| [Activation Functions under Muon vs AdamW](https://aaholmes.github.io/nanogpt/) | Study of activation functions and gated MLPs in the [NanoGPT speedrun](https://github.com/KellerJordan/modded-nanogpt) (train a 124M-parameter GPT on FineWeb to val loss ≤3.28 nats as fast as possible on 8×H100). Key finding: rankings depend strongly on the optimizer. Gated MLPs beat standard MLPs under AdamW but lose significantly under Muon (p<0.05, Δ=+0.10–0.16 nats). I designed SNIQU (Self-Normalizing Inverse-and-Quadratic Unit — a C² activation with a quadratic positive branch and smooth inverse negative branch, self-normalized to zero mean and unit variance under Gaussian input) which significantly beats ReLU² under Muon (p<0.0001, n=9, Δ=−0.076 nats); whether the advantage persists under NorMuon (the production optimizer) is still open. | `PyTorch` `NanoGPT` `Muon` |
 
 ### Neurosymbolic AI
 
