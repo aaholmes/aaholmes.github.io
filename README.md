@@ -11,6 +11,12 @@ Hi! I'm a Computational Physicist and AI Researcher (Ph.D. Theoretical Physics, 
 This thread runs through all my work. In quantum chemistry, I combined deterministic wavefunction selection with stochastic perturbation theory to make exact calculations tractable at scale (SHCI, 2,100+ citations). Now I apply the same thinking to AI, pairing symbolic reasoning with learned neural components so that each handles what it's best at. I've been building production AI systems since 2018 (Transformer-based semantic search, pre-BERT), deployed my algorithms on some of the largest supercomputers in the world at Lawrence Livermore National Lab, and built quantitative models for systematic trading at Citadel.
 
 ---
+### LLM Training Research
+
+| Project | Description | Tech |
+| :--- | :--- | :--- |
+| [Activation Functions under Muon vs AdamW](https://aaholmes.github.io/nanogpt/) | Systematic study of activation functions and gated MLPs in a 124M-parameter GPT trained on FineWeb-10B. sniqu (self-normalized IQU) significantly outperforms ReLU² under Muon (p<0.0001, n=9, Δ=−0.076 nats). Gated MLPs reverse from a win under AdamW to a significant loss under Muon (p<0.05, Δ=+0.10–0.16 nats) — showing that activation rankings established under Adam-family optimizers do not reliably transfer to Muon. | `PyTorch` `NanoGPT` `Muon` |
+
 ### Neurosymbolic AI
 
 | Project | Description | Tech |
