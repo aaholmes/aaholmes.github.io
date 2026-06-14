@@ -8,34 +8,35 @@
 
 Hi! I'm a Computational Physicist and AI Researcher (Ph.D. Theoretical Physics, Cornell). I build accurate and efficient computational systems by combining paradigms: deterministic with stochastic, symbolic with neural, exact with approximate.
 
-This thread runs through all my work. In quantum chemistry, I combined deterministic wavefunction selection with stochastic perturbation theory to make exact calculations tractable at scale (SHCI, 2,100+ citations). Now I apply the same thinking to AI, pairing symbolic reasoning with learned neural components so that each handles what it's best at. I've been building production AI systems since 2018 (Transformer-based semantic search, pre-BERT), deployed my algorithms on some of the largest supercomputers in the world at Lawrence Livermore National Lab, and built quantitative models for systematic trading at Citadel.
+This thread runs through all my work. In quantum chemistry, I combined deterministic wavefunction selection with stochastic perturbation theory to make exact calculations tractable at scale (SHCI, 2,100+ citations). Now I apply the same thinking to AI, pairing symbolic reasoning with learned neural components so that each handles what it's best at, and pushing on the efficiency of LLM inference and training. I've been building production AI systems since 2018 (Transformer-based semantic search, pre-BERT), deployed my algorithms on some of the largest supercomputers in the world at Lawrence Livermore National Lab, and built quantitative models for systematic trading at Citadel.
 
 ---
-### LLM Training Research
+### Large Language Models
 
 | Project | Description | Tech |
 | :--- | :--- | :--- |
+| [Inference Engine + Post-hoc MLA](https://github.com/aaholmes/llms) | From-scratch single-GPU inference engine for Qwen3, and an active study of **post-hoc Multi-head Latent Attention (MLA) conversion**: compressing the KV cache 4–8× via activation-aware SVD with a partial-RoPE split, quantifying how far a short recovery finetune closes the resulting quality gap, and characterizing the trade-off against speculative-decoding throughput at a fixed 16 GB VRAM budget. Custom Triton kernels and a bit-exact validation harness against HuggingFace. | `PyTorch` `Triton` `CUDA` |
 | [Activation Functions under Muon vs AdamW](https://aaholmes.github.io/nanogpt/) | Study of activation functions and gated MLPs in the [NanoGPT speedrun](https://github.com/KellerJordan/modded-nanogpt) (train a 124M-parameter GPT on FineWeb to val loss ≤3.28 nats as fast as possible on 8×H100). Key finding: rankings depend strongly on the optimizer. Gated MLPs beat standard MLPs under AdamW but lose significantly under Muon (p<0.05, Δ=+0.10–0.16 nats). I designed SNIQU (Self-Normalizing Inverse-and-Quadratic Unit — a C² activation with a quadratic positive branch and smooth inverse negative branch, self-normalized to zero mean and unit variance under Gaussian input) which significantly beats ReLU² under Muon (p<0.0001, n=9, Δ=−0.076 nats); whether the advantage persists under NorMuon (the production optimizer) is still open. | `PyTorch` `NanoGPT` `Muon` |
 
 ### Neurosymbolic AI
 
 | Project | Description | Tech |
 | :--- | :--- | :--- |
-| [Geometry Theorem Prover](https://github.com/aaholmes/geoprover) | Neurosymbolic prover that combines exhaustive symbolic deduction (49 rules to fixed point) with neural-guided MCTS over auxiliary constructions. A 4M-parameter transformer learns the creative step that deduction alone can't do. Solves 189/231 problems on AlphaGeometry's JGEX benchmark, including Morley's theorem and the 9-point circle. | `Rust` `PyO3` `PyTorch` |
 | [Neurosymbolic Chess Engine](https://github.com/aaholmes/neurosymbolic-mcts) | Chess engine where symbolic reasoning (mate search, material-aware quiescence search) gates neural evaluation. Symbolic knowledge dramatically accelerates learning: +600 Elo over the pure neural baseline (AlphaZero-style) in 20 vs 30 generations of self-play. | `Rust` `MCTS` `PyTorch` |
+| [Geometry Theorem Prover](https://github.com/aaholmes/geoprover) | Neurosymbolic prover that combines exhaustive symbolic deduction (49 rules to fixed point) with neural-guided MCTS over auxiliary constructions. A 4M-parameter transformer learns the creative step that deduction alone can't do. Solves 189/231 problems on AlphaGeometry's JGEX benchmark, including Morley's theorem and the 9-point circle. | `Rust` `PyO3` `PyTorch` |
 
-### Algorithms & Optimization
+### Quality-Diversity & Multi-Agent Systems
 
 | Project | Description | Tech |
 | :--- | :--- | :--- |
 | [MMR-Elites](https://github.com/aaholmes/mmr-elites) | Quality-Diversity algorithm that reformulates archive maintenance as submodular maximization via Maximum Marginal Relevance from information retrieval. Fixed O(K) memory, O(K log K) selection, 12x better uniformity than MAP-Elites in 20-dimensional behavior spaces. | `Rust` `PyO3` `Python` |
+| [Multi-Agent Path Planning](https://github.com/aaholmes/multiagent-pathplanning) | Optimal multi-robot navigation in Rust: Conflict-Based Search (CBS) for globally optimal, collision-free paths, with Optimal Reciprocal Collision Avoidance (ORCA) for real-time local avoidance. Python bindings via PyO3; 176 tests covering the search and collision-geometry guarantees. | `Rust` `PyO3` `CBS` `ORCA` |
 
 ### Quantum Chemistry
 
 | Project | Description | Tech |
 | :--- | :--- | :--- |
-| [Arrow / SHCI](https://github.com/aaholmes/shci) | Reference implementation of Semistochastic Heat-Bath Configuration Interaction, the method I invented during my Ph.D. Combines deterministic selection of important wavefunction components with stochastic perturbative corrections. Hybrid MPI+OpenMP. | `C++` `MPI` `OpenMP` |
-| [RISQ](https://github.com/aaholmes/risq) | Rust implementation of SHCI for near-exact electronic structure calculations. Bitstring determinant representation, Davidson eigensolver, and alias sampling for O(1) stochastic draws. | `Rust` |
+| [RISQ](https://github.com/aaholmes/risq) | Rust implementation of Semistochastic Heat-Bath Configuration Interaction (SHCI) — the method I invented during my Ph.D. — for near-exact electronic structure calculations. Combines deterministic selection of important wavefunction components with stochastic perturbative corrections; bitstring determinant representation, Davidson eigensolver, and alias sampling for O(1) stochastic draws. | `Rust` |
 
 ---
 ### Foundational Research
