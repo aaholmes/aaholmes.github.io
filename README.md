@@ -32,6 +32,12 @@ This thread runs through all my work. In quantum chemistry, I combined determini
 | [MMR-Elites](https://github.com/aaholmes/mmr-elites) | Quality-Diversity algorithm that reformulates archive maintenance as submodular maximization via Maximum Marginal Relevance from information retrieval. Fixed O(K) memory, O(K log K) selection, 12x better uniformity than MAP-Elites in 20-dimensional behavior spaces. | `Rust` `PyO3` `Python` |
 | [Multi-Agent Path Planning](https://github.com/aaholmes/multiagent-pathplanning) | Optimal multi-robot navigation in Rust: Conflict-Based Search (CBS) for globally optimal, collision-free paths, with Optimal Reciprocal Collision Avoidance (ORCA) for real-time local avoidance. Python bindings via PyO3; 176 tests covering the search and collision-geometry guarantees. | `Rust` `PyO3` `CBS` `ORCA` |
 
+### Optimization & EDA
+
+| Project | Description | Tech |
+| :--- | :--- | :--- |
+| [Macro Placement](/projects/macro-placement/) | Pairs a **differentiable global placer** (GPU — optimizes any loss you can write down) with a **discrete greedy detailer** on the exact metric: the continuous + exact combination that runs through my work. 31% below a RePlAce-quality reference across all 17 IBM chip benchmarks, with a paired-experiment appendix of what didn't work. [[write-up]](/projects/macro-placement/) · [[code]](https://github.com/aaholmes/macro-placer) | `PyTorch` `CUDA` `NumPy` |
+
 ### Quantum Chemistry
 
 | Project | Description | Tech |
