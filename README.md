@@ -6,48 +6,127 @@
 
 <img src="profile_pic.png" width="220" align="right" style="margin-left: 16px; border-radius: 50%;" />
 
-Hi! I'm a Computational Physicist and AI Researcher (Ph.D. Theoretical Physics, Cornell). I build accurate and efficient computational systems by combining paradigms: deterministic with stochastic, symbolic with neural, exact with approximate.
+Hi! I'm a computational physicist and AI researcher (Ph.D. Theoretical Physics, Cornell). I work on hard search problems — the kind where the space of possibilities is far too large to enumerate, and the whole game is deciding what to look at next.
 
-This thread runs through all my work. In quantum chemistry, I combined deterministic wavefunction selection with stochastic perturbation theory to make exact calculations tractable at scale (SHCI, 2,300+ citations). Now I apply the same thinking to AI, pairing symbolic reasoning with learned neural components so that each handles what it's best at, and pushing on the efficiency of LLM inference and training. I've been building production AI systems since 2018 (Transformer-based semantic search, pre-BERT), deployed my algorithms on some of the largest supercomputers in the world at Lawrence Livermore National Lab, and built quantitative models for systematic trading at Citadel.
+My approach has been the same for fifteen years: **solve as much of the problem as you can with efficient exact methods, and fall back on learned or statistical ones only for the remainder.** The exact layer reduces what has to be learned, and it improves the quality of the training signal for whatever is left.
 
----
-### Large Language Models
+I first developed this idea in quantum chemistry. A molecule's possible electron configurations form a graph that grows exponentially with its size, far too large to store for anything but toy problems. The method I developed during my Ph.D. (SHCI, 2,300+ citations) uses a cheap heuristic to find the small fraction of that graph that matters, searches that part exactly, and estimates the remainder by sampling. It's now a standard method in the field, and the calculations I ran with it are reference benchmarks that newer neural network and quantum computing methods are compared against.
 
-| Project | Description | Tech |
-| :--- | :--- | :--- |
-| [Inference Engine + Post-hoc MLA](https://github.com/aaholmes/llms) | From-scratch single-GPU inference engine for Qwen3, and a study of **post-hoc Multi-head Latent Attention (MLA) conversion**: compressing the KV cache **4× for +16% perplexity** against a matched-budget control, via activation-aware SVD with a partial-RoPE split. A small mergeable LoRA corrector trained to minimize **total-variation distance** to the original **beats the standard KL objective** on every fidelity measure (80% vs 74% token agreement at 4×); the same corrector lifts speculative-decoding throughput to **1.48–1.60×**. Custom Triton kernels and a bit-exact validation harness against HuggingFace. | `PyTorch` `Triton` `CUDA` |
-| [NanoGPT Single-GPU Harness](https://github.com/aaholmes/nanogpt-1gpu) | A single-GPU (16 GB) adaptation of the [modded-nanogpt speedrun](https://github.com/KellerJordan/modded-nanogpt) for architecture screening — a research **harness, not a benchmark**, where the value is in the rankings and a methodology built not to fool itself: an every-weight-actually-trains assertion, a unigram-floor gate, paired same-seed comparisons, per-variant learning-rate matching, and budget-stability re-runs — all CI-enforced on every push. | `PyTorch` `NorMuon` `Muon` |
+The same structure keeps working in new fields. Since then I've applied it to game playing, theorem proving, chip design, and the cost of running large language models. Along the way I've built production AI systems since 2018 (Transformer-based semantic search, pre-BERT), deployed my algorithms on some of the largest supercomputers in the world at Lawrence Livermore National Lab, and built quantitative models for systematic trading at Citadel.
 
-### Neurosymbolic AI
+<br clear="all" />
 
-| Project | Description | Tech |
-| :--- | :--- | :--- |
-| [Neurosymbolic Chess Engine](https://github.com/aaholmes/neurosymbolic-mcts) | Chess engine where symbolic reasoning (mate search, material-aware quiescence search) gates neural evaluation. Symbolic knowledge dramatically accelerates learning: +600 Elo over the pure neural baseline (AlphaZero-style) in 20 vs 30 generations of self-play. | `Rust` `MCTS` `PyTorch` |
-| [Geometry Theorem Prover](https://github.com/aaholmes/geoprover) | Neurosymbolic prover that combines exhaustive symbolic deduction (49 rules to fixed point) with neural-guided MCTS over auxiliary constructions. A 4M-parameter transformer learns the creative step that deduction alone can't do. Solves 189/231 problems on AlphaGeometry's JGEX benchmark, including Morley's theorem and the 9-point circle. | `Rust` `PyO3` `PyTorch` |
-
-### Quality-Diversity & Multi-Agent Systems
-
-| Project | Description | Tech |
-| :--- | :--- | :--- |
-| [MMR-Elites](https://github.com/aaholmes/mmr-elites) | Quality-Diversity algorithm that reformulates archive maintenance as submodular maximization via Maximum Marginal Relevance from information retrieval. Fixed O(K) memory, O(K log K) selection, 12x better uniformity than MAP-Elites in 20-dimensional behavior spaces. | `Rust` `PyO3` `Python` |
-| [Multi-Agent Path Planning](https://github.com/aaholmes/multiagent-pathplanning) | Optimal multi-robot navigation in Rust: Conflict-Based Search (CBS) for globally optimal, collision-free paths, with Optimal Reciprocal Collision Avoidance (ORCA) for real-time local avoidance. Python bindings via PyO3; 176 tests covering the search and collision-geometry guarantees. | `Rust` `PyO3` `CBS` `ORCA` |
-
-### Quantum Chemistry
-
-| Project | Description | Tech |
-| :--- | :--- | :--- |
-| [RISQ](https://github.com/aaholmes/risq) | Rust implementation of Semistochastic Heat-Bath Configuration Interaction (SHCI) — the method I invented during my Ph.D. — for near-exact electronic structure calculations. Combines deterministic selection of important wavefunction components with stochastic perturbative corrections; bitstring determinant representation, Davidson eigensolver, and alias sampling for O(1) stochastic draws. | `Rust` |
+| [Rewards that can't be gamed](#neurosymbolic-chess-engine) | [Cheaper LLM inference](#inference-engine--post-hoc-mla) | [Chip floorplanning](#gpu-macro-placement) |
+| :---: | :---: | :---: |
+| <a href="#neurosymbolic-chess-engine"><img src="https://raw.githubusercontent.com/aaholmes/neurosymbolic-mcts/main/tournament_results_800eval_elo_plot.png" width="260" /></a> | <a href="#inference-engine--post-hoc-mla"><img src="https://raw.githubusercontent.com/aaholmes/llms/main/experiments/stage_b/frontier_plot.png" width="260" /></a> | <a href="#gpu-macro-placement"><img src="https://raw.githubusercontent.com/aaholmes/macro-placer/master/notes/opt_ibm18.gif" width="260" /></a> |
+| ~600 Elo over a pure-neural run, in fewer generations | 4× smaller KV cache for 16% quality | 34% below reference placements, at least 4th |
 
 ---
-### Foundational Research
 
-My Ph.D. research introduced Heat-Bath Configuration Interaction (HCI) ([Holmes et al., *JCTC* 2016](https://arxiv.org/pdf/1606.07453)) and Semistochastic HCI ([Sharma, Holmes et al., *JCTC* 2017](https://arxiv.org/pdf/1610.06660)), methods that replaced inefficient generate-and-test approaches with deterministic selection of the most significant wavefunction components, combined with stochastic sampling for perturbative corrections. This deterministic + stochastic combination made previously intractable calculations routine.
+## Reward Design & Neurosymbolic AI
 
-These methods enabled the first near-exact potential energy surfaces for fourteen electronic states of the carbon dimer ([Holmes et al., *JCP* 2017](https://pubs.aip.org/aip/jcp/article/147/16/164111/76673)) and the ground-state binding curve of the chromium dimer ([Li, Yao, Holmes et al., *Phys. Rev. Res.* 2020](https://journals.aps.org/prresearch/pdf/10.1103/PhysRevResearch.2.012015)), a grand-challenge problem that had remained outstanding for decades. SHCI is now a leading benchmark method implemented in major quantum chemistry packages.
+Push as much of the problem as possible onto exact, automatic computation, and learn only the residual. When the exact part is a *reward*, this buys something specific: it can't be gamed, because the answer it returns is correct by construction.
+
+### [Neurosymbolic Chess Engine](https://github.com/aaholmes/neurosymbolic-mcts)
+
+Self-play engines like AlphaZero learn everything from scratch, including positions a classical solver settles in microseconds. This one searches classically first and treats that answer as exact, so the network only spends capacity where the classical layer can't decide.
+
+It's really a **reward-shaping** project. Instead of rewarding only terminal positions like checkmate, it rewards any position an exact method can settle — a forced mate in N moves. The training signal gets denser, and unlike a learned reward model it cannot be gamed. The result: **~600 Elo above an identically-trained purely neural run, reached in 18 generations rather than 28.**
+
+<img src="https://raw.githubusercontent.com/aaholmes/neurosymbolic-mcts/main/tournament_results_800eval_elo_plot.png" width="620" style="max-width:100%;" />
+
+*Elo across self-play generations for both runs, evaluated at 800 rollouts per move.*
+
+*Rust · MCTS · PyTorch*
+
+### [Geometry Theorem Prover](https://github.com/aaholmes/geoprover)
+
+The same split, applied to proofs: a deterministic engine grinds out every deduction it can reach (49 rules to fixed point), and a 4M-parameter transformer proposes the step deduction alone can't find — the auxiliary construction. Learning only the part that genuinely requires invention is what keeps the model that small.
+
+Deduction alone solves 179 of the 231 problems in AlphaGeometry's JGEX benchmark. Adding the trained network's construction proposals takes it to **189/231**, and the problems it adds are the ones that need a genuine idea — Morley's theorem and the nine-point circle among them.
+
+<img src="geoprover_proof.png" width="560" style="max-width:100%;" />
+
+*A solved problem: given the black configuration, prove four points lie on a common circle. Blue dashed lines are the auxiliary constructions; green is the goal relation, proved.*
+
+*Rust · PyO3 · PyTorch*
+
+---
+
+## Large Language Models
+
+Inference is bottlenecked by memory movement: the model re-reads a large cache for every token it generates. Every way of shrinking that cache is lossy, so the question is how much quality you can buy back.
+
+### [Inference Engine + Post-hoc MLA](https://github.com/aaholmes/llms)
+
+A from-scratch single-GPU inference engine for Qwen3, and a study of converting a trained model's attention to a compressed form *after* training (multi-head → multi-head latent attention). Shrinking the KV cache 1.33× costs 0.5% quality relative to a matched-budget control; **4× costs 16%**.
+
+To claw back the loss I train a small adapter to pull the degraded model back toward the original's output distribution, targeting **total-variation distance** — the divergence that actually cashes out in sampled tokens — which beats the standard KL objective on every fidelity measure. The adapter merges into the weights, so it costs nothing at inference.
+
+<img src="https://raw.githubusercontent.com/aaholmes/llms/main/experiments/stage_b/frontier_plot.png" width="620" style="max-width:100%;" />
+
+*PyTorch · Triton · CUDA*
+
+### [NanoGPT Single-GPU Harness](https://github.com/aaholmes/nanogpt-1gpu)
+
+A single-GPU (16 GB) adaptation of the [modded-nanogpt speedrun](https://github.com/KellerJordan/modded-nanogpt) for screening architecture changes cheaply. It's a research **harness, not a benchmark** — the value is in the rankings, and in a methodology built not to fool itself: paired same-seed comparisons, per-variant learning-rate matching, and an assertion that every weight actually trains, all CI-enforced on every push.
+
+*PyTorch · Muon · NorMuon*
+
+---
+
+## Search & Optimization
+
+### [GPU Macro Placement](https://github.com/aaholmes/macro-placer)
+
+Where a chip's large memory blocks sit on the die largely sets the speed, power, and routability of everything placed after them — a step dominated by Cadence, Synopsys, and Siemens. The method combines a smooth global optimization of a differentiable proxy with simulated annealing using the full, non-differentiable loss — two optimization stages, with a legalization step in between. Gradient descent on the proxy produces a global layout, overlaps are removed, then annealed local search makes further discrete improvements that a gradient cannot express.
+
+The idea it rests on: **the heuristics only decide where to look; acceptance always uses the real score.** Congestion was the binding constraint, and no differentiable congestion model helped — even one correlating 0.995 with the true metric. What worked was leaving it out of the loss entirely and aiming the *proposals* instead: nudge one block a single grid cell so an entire wire route leaves a congested line. That one move produced 87% of the final improvement.
+
+Both stages are enabled by a from-scratch reimplementation of the scorer that matches the official metric exactly but runs 50–3600× faster, which is what makes searching hard affordable.
+
+In an open challenge — 17 benchmarks, one hour of compute each — it scored **34% below the reference placements**, good for at least 4th, with zero overlaps and on hardware slower than the rules allowed.
+
+<img src="https://raw.githubusercontent.com/aaholmes/macro-placer/master/notes/opt_ibm18.gif" width="480" style="max-width:100%;" />
+
+*Annealed local search using the exact objective, ibm18.*
+
+*PyTorch · GPU · Simulated Annealing*
+
+### [MMR-Elites](https://github.com/aaholmes/mmr-elites)
+
+Often you don't want the single best solution but a diverse set of good ones — and selecting on quality alone gives you redundancy, because the best candidates cluster together. This reformulates keeping such a set as **submodular maximization**, borrowing Maximum Marginal Relevance from information retrieval: fixed O(K) memory, O(K log K) selection, and 12× better uniformity than MAP-Elites in 20-dimensional behavior spaces. It applies well beyond evolutionary search — picking a varied, high-quality subset of LLM samples is the same problem.
+
+*Rust · PyO3 · Python*
+
+### [Multi-Agent Path Planning](https://github.com/aaholmes/multiagent-pathplanning)
+
+Optimal multi-robot navigation, and the same split again: Conflict-Based Search plans globally optimal, collision-free paths up front, while Optimal Reciprocal Collision Avoidance handles what the plan can't anticipate in real time. Exact where you can be, reactive where you must be. Python bindings via PyO3; 176 tests covering the search and collision-geometry guarantees.
+
+<img src="pathplanning.gif" width="420" style="max-width:100%;" />
+
+*Eight agents crossing a maze, each holding to its planned route while reacting locally to the others.*
+
+*Rust · PyO3 · CBS · ORCA*
+
+---
+
+## Quantum Chemistry — where the method came from
+
+My Ph.D. work introduced Heat-Bath Configuration Interaction ([Holmes et al., *JCTC* 2016](https://arxiv.org/pdf/1606.07453)) and its semistochastic extension ([Sharma, Holmes et al., *JCTC* 2017](https://arxiv.org/pdf/1610.06660)). The prior state of the art generated enormous numbers of candidate configurations and tested each one to see if it mattered. These methods use the structure of the interaction itself to jump straight to the significant ones, then recover the neglected remainder by sampling rather than by brute force. The selection repeats, each round expanding the space that gets searched exactly — and that made calculations which had been out of reach routine.
+
+<img src="hci_screening.png" width="600" style="max-width:100%;" />
+
+*Finding the important terms without generating them all. The matrix elements are computed once up front and stored in descending order of magnitude; for each candidate the algorithm walks that sorted list only until it falls below a threshold that adapts to the current coefficient, then stops. Blue gets generated, green is never touched — and the test costs constant time. Figure from [Smith, Mussard, Holmes & Sharma, *JCTC* 2017](https://doi.org/10.1021/acs.jctc.7b00900) (open access).*
+
+The calculations that followed are the reason the method stuck. For the carbon dimer we mapped fourteen low-lying electronic states across their full range of bond lengths, in a large basis (182 orbitals, cc-pV5Z), landing within 30–50 μHa of the exact answer for that basis — roughly a millionth of the total energy ([Holmes et al., *JCP* 2017](https://pubs.aip.org/aip/jcp/article/147/16/164111/76673)). More states, a larger basis, and tighter error bars than were available at the time, which is what makes a calculation useful as a reference rather than just as a result.
+
+The chromium dimer is harder still — not because it is bigger, but because an unusually large number of configurations contribute meaningfully at once, so the set you actually need is far larger and much harder to find. It had resisted accurate treatment for decades. Its configuration space holds roughly **10⁴²** entries; we computed its binding curve to within a few mHa near the basis set limit ([Li, Yao, Holmes et al., *Phys. Rev. Res.* 2020](https://journals.aps.org/prresearch/pdf/10.1103/PhysRevResearch.2.012015)), without ever storing more than a vanishing fraction of them. These numbers are now standard reference points that newer neural network and quantum computing methods are measured against, and SHCI is implemented in major quantum chemistry packages. I maintain a modern Rust implementation, [RISQ](https://github.com/aaholmes/risq) — bitstring determinants, a Davidson eigensolver, and alias sampling for O(1) stochastic draws.
 
 <br>
 
 ---
+
 #### Contact
 
 I'm always happy to chat about research, projects, or opportunities. Reach me via [email](mailto:adamaholmes@gmail.com) or on [LinkedIn](https://www.linkedin.com/in/adamaholmes/).
