@@ -85,7 +85,7 @@ The idea it rests on: **the heuristics only decide where to look; acceptance alw
 
 Both stages are enabled by a from-scratch reimplementation of the scorer that matches the official metric exactly but runs 50–3600× faster, which is what makes searching hard affordable.
 
-In an open challenge — 17 benchmarks, one hour of compute each — it scored **34% below the reference placements**, good for at least 4th, with zero overlaps and on hardware slower than the rules allowed.
+In an open challenge — 17 benchmarks, one hour of compute each — it scored **34% below the reference placements**, good for at least 4th, with zero overlaps and on hardware slower than the rules allowed. Full [write-up](/projects/macro-placement/), including a paired-experiment appendix of what didn't work.
 
 <img src="https://raw.githubusercontent.com/aaholmes/macro-placer/master/notes/opt_ibm18.gif" width="480" style="max-width:100%;" />
 
