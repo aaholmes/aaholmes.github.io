@@ -70,10 +70,6 @@ Exact where it can be, learned where it must be, applied to proofs: a determinis
 
 Deduction alone solves 179 of the 231 problems in AlphaGeometry's JGEX benchmark. Adding the network's construction proposals takes it to **189/231**, and the problems it adds are the ones that need a genuine idea — Morley's theorem and the nine-point circle among them.
 
-<img loading="lazy" src="geoprover_proof.png" width="560" style="max-width:100%;" />
-
-*A solved problem: given the black configuration, prove four points lie on a common circle. Blue dashed lines are the auxiliary constructions; green is the goal relation, proved.*
-
 *Rust · PyO3 · PyTorch*
 
 ---
@@ -114,7 +110,7 @@ Optimal multi-robot navigation, split between an exact layer and a reactive one.
 
 ## Quantum Chemistry Research
 
-Modeling interacting quantum systems from first principles often entails navigating an exponentially large graph of electronic configurations. During my Ph.D. I developed an efficient algorithm for searching such graphs, using a physics-informed heuristic to keep the compute manageable: Heat-Bath Configuration Interaction ([Holmes et al., *JCTC* 2016](https://arxiv.org/pdf/1606.07453)). "Heat-bath" refers to the heat-bath sampling algorithm I had invented earlier, which the heuristic comes from; "configuration interaction" is quantum chemistry's term for methods that represent a state as a linear combination of many electron configurations.
+Modeling interacting quantum systems from first principles often entails navigating an exponentially large graph of electronic configurations. During my Ph.D. I developed an efficient algorithm for searching such graphs, using a physics-informed heuristic to keep the compute manageable, called Heat-Bath Configuration Interaction ([Holmes et al., *JCTC* 2016](https://arxiv.org/pdf/1606.07453)). "Heat-bath" refers to the heat-bath sampling algorithm I had invented earlier, which the heuristic comes from; "configuration interaction" is quantum chemistry's term for methods that represent a state as a linear combination of many electron configurations.
 
 Where the prior state of the art generated enormous numbers of candidate configurations and tested each one to see if it mattered, the heuristic jumps straight to the significant ones. Then, with my colleagues, I removed the memory bottleneck in a key component, perturbation theory, by combining an efficient deterministic approximation (built on the same heat-bath heuristic) with stochastic sampling to correct it ([Sharma, Holmes et al., *JCTC* 2017](https://arxiv.org/pdf/1610.06660)) — a *semistochastic* algorithm. Together these became Semistochastic HCI (SHCI), now a benchmark algorithm in electronic structure theory for its accuracy and efficiency.
 
