@@ -96,13 +96,13 @@ In an open challenge — 17 benchmarks, one hour of compute each — it scored *
 
 ### [MMR-Elites](https://github.com/aaholmes/mmr-elites)
 
-Often you don't want the single best solution but a diverse set of good ones — and selecting on quality alone gives you redundancy, because the best candidates cluster together. This reformulates keeping such a set as **submodular maximization**, borrowing Maximum Marginal Relevance from information retrieval: fixed O(K) memory, O(K log K) selection, and 12× better uniformity than MAP-Elites in 20-dimensional behavior spaces. Selecting a varied, high-quality subset of LLM samples is analogous — quality and diversity traded off over a fixed budget.
+Often you don't want the single best solution but a diverse set of good ones — and selecting on quality alone gives you redundancy, because the best candidates cluster together. This reformulates keeping such a set as **submodular maximization** — the class of problems where each item added is worth less the more you already have, which is exactly what makes a greedy selection near-optimal — borrowing Maximum Marginal Relevance from information retrieval: fixed O(K) memory, O(K log K) selection, and 12× better uniformity than MAP-Elites in 20-dimensional behavior spaces. Selecting a varied, high-quality subset of LLM samples is analogous — quality and diversity traded off over a fixed budget.
 
 *Rust · PyO3 · Python*
 
 ### [Multi-Agent Path Planning](https://github.com/aaholmes/multiagent-pathplanning)
 
-Optimal multi-robot navigation, split between an exact layer and a reactive one: Conflict-Based Search plans globally optimal, collision-free paths up front, while Optimal Reciprocal Collision Avoidance handles what the plan can't anticipate in real time. Exact where you can be, reactive where you must be. Python bindings via PyO3; 176 tests covering the search and collision-geometry guarantees.
+Optimal multi-robot navigation, split between an exact layer and a reactive one. A global planner computes provably optimal, collision-free routes for every robot before anything moves (Conflict-Based Search); a local controller then adjusts each robot's velocity moment to moment for whatever the plan could not anticipate (Optimal Reciprocal Collision Avoidance). Exact where you can be, reactive where you must be. Python bindings via PyO3; 176 tests covering the search and collision-geometry guarantees.
 
 <img loading="lazy" src="cbs_orca_crossing.gif" width="878" style="max-width:100%;" />
 
@@ -118,7 +118,9 @@ Optimal multi-robot navigation, split between an exact layer and a reactive one:
 
 ## Quantum Chemistry Research
 
-My Ph.D. work introduced Heat-Bath Configuration Interaction ([Holmes et al., *JCTC* 2016](https://arxiv.org/pdf/1606.07453)) and its semistochastic extension ([Sharma, Holmes et al., *JCTC* 2017](https://arxiv.org/pdf/1610.06660)). The prior state of the art generated enormous numbers of candidate configurations and tested each one to see if it mattered. These methods use the structure of the interaction itself to jump straight to the significant ones, then recover the remainder by sampling. The selection repeats, each round expanding the space searched exactly, which made calculations that had been out of reach routine.
+Modeling interacting quantum systems from first principles often entails navigating an exponentially large graph of electronic configurations. During my Ph.D. I developed an efficient algorithm for searching such graphs, using a physics-informed heuristic to keep the compute manageable: Heat-Bath Configuration Interaction ([Holmes et al., *JCTC* 2016](https://arxiv.org/pdf/1606.07453)). "Heat-bath" refers to the heat-bath sampling algorithm I had invented earlier, which the heuristic comes from; "configuration interaction" is quantum chemistry's term for methods that represent a state as a linear combination of many electron configurations.
+
+Where the prior state of the art generated enormous numbers of candidate configurations and tested each one to see if it mattered, the heuristic jumps straight to the significant ones. Then, with my colleagues, I removed the memory bottleneck in a key component, perturbation theory, by combining an efficient deterministic approximation with stochastic sampling to correct it ([Sharma, Holmes et al., *JCTC* 2017](https://arxiv.org/pdf/1610.06660)) — a *semistochastic* algorithm. Together these became Semistochastic HCI (SHCI), now a benchmark algorithm in electronic structure theory for its accuracy and efficiency.
 
 <img loading="lazy" src="hci_screening.png" width="600" style="max-width:100%;" />
 
