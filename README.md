@@ -66,7 +66,7 @@ It's really a **reward-shaping** project. Instead of rewarding only terminal pos
 
 ### [Geometry Theorem Prover](https://github.com/aaholmes/geoprover)
 
-The same split, applied to proofs: a deterministic engine grinds out every deduction it can reach (49 rules to fixed point), and a 4M-parameter transformer proposes the step deduction alone can't find — the auxiliary construction. Learning only the part that genuinely requires invention is what keeps the model that small.
+Exact where it can be, learned where it must be, applied to proofs: a deterministic engine grinds out every deduction it can reach (49 rules to fixed point), and a 4M-parameter transformer proposes the step deduction alone can't find — the auxiliary construction. Learning only the part that genuinely requires invention is what keeps the model that small.
 
 Deduction alone solves 179 of the 231 problems in AlphaGeometry's JGEX benchmark. Adding the network's construction proposals takes it to **189/231**, and the problems it adds are the ones that need a genuine idea — Morley's theorem and the nine-point circle among them.
 
@@ -96,13 +96,13 @@ In an open challenge — 17 benchmarks, one hour of compute each — it scored *
 
 ### [MMR-Elites](https://github.com/aaholmes/mmr-elites)
 
-Often you don't want the single best solution but a diverse set of good ones — and selecting on quality alone gives you redundancy, because the best candidates cluster together. This reformulates keeping such a set as **submodular maximization**, borrowing Maximum Marginal Relevance from information retrieval: fixed O(K) memory, O(K log K) selection, and 12× better uniformity than MAP-Elites in 20-dimensional behavior spaces. Picking a varied, high-quality subset of LLM samples is the same problem.
+Often you don't want the single best solution but a diverse set of good ones — and selecting on quality alone gives you redundancy, because the best candidates cluster together. This reformulates keeping such a set as **submodular maximization**, borrowing Maximum Marginal Relevance from information retrieval: fixed O(K) memory, O(K log K) selection, and 12× better uniformity than MAP-Elites in 20-dimensional behavior spaces. Selecting a varied, high-quality subset of LLM samples is analogous — quality and diversity traded off over a fixed budget.
 
 *Rust · PyO3 · Python*
 
 ### [Multi-Agent Path Planning](https://github.com/aaholmes/multiagent-pathplanning)
 
-Optimal multi-robot navigation, and the same split again: Conflict-Based Search plans globally optimal, collision-free paths up front, while Optimal Reciprocal Collision Avoidance handles what the plan can't anticipate in real time. Exact where you can be, reactive where you must be. Python bindings via PyO3; 176 tests covering the search and collision-geometry guarantees.
+Optimal multi-robot navigation, split between an exact layer and a reactive one: Conflict-Based Search plans globally optimal, collision-free paths up front, while Optimal Reciprocal Collision Avoidance handles what the plan can't anticipate in real time. Exact where you can be, reactive where you must be. Python bindings via PyO3; 176 tests covering the search and collision-geometry guarantees.
 
 <img loading="lazy" src="cbs_orca_crossing.gif" width="878" style="max-width:100%;" />
 
