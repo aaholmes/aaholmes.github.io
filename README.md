@@ -104,13 +104,9 @@ Often you don't want the single best solution but a diverse set of good ones —
 
 Optimal multi-robot navigation, split between an exact layer and a reactive one. A global planner computes provably optimal, collision-free routes for every robot before anything moves (Conflict-Based Search); a local controller then adjusts each robot's velocity moment to moment for whatever the plan could not anticipate (Optimal Reciprocal Collision Avoidance). Exact where you can be, reactive where you must be. Python bindings via PyO3; 176 tests covering the search and collision-geometry guarantees.
 
-<img loading="lazy" src="cbs_orca_crossing.gif" width="878" style="max-width:100%;" />
-
-*Both layers at once. Dashed lines are the CBS plans; a red ring marks an agent whose velocity is being deflected by ORCA, with a gray arrow showing the velocity it wanted.*
-
 <img loading="lazy" src="orca_circle.gif" width="830" style="max-width:100%;" />
 
-*The signature experiment from the ORCA paper: twelve agents on a circle, each heading to the antipodal point, with no global planner at all. Pure local avoidance resolves the twelve-way encounter into the characteristic rotating vortex.*
+*The signature experiment from the ORCA paper: twelve agents on a circle, each heading to the antipodal point, with no global planner at all. A red ring marks an agent whose velocity is being deflected; local avoidance alone resolves the twelve-way encounter into the characteristic rotating vortex.*
 
 *Rust · PyO3 · CBS · ORCA*
 
