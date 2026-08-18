@@ -36,7 +36,7 @@ A from-scratch single-GPU inference engine for Qwen3, and a study of converting 
 
 To claw back the loss I train a small adapter to pull the degraded model back toward the original's output distribution, targeting **total-variation distance** — the divergence that actually cashes out in sampled tokens — which beats the standard KL objective on every fidelity measure. The adapter merges into the weights, so it costs nothing at inference.
 
-<img src="https://raw.githubusercontent.com/aaholmes/llms/main/experiments/stage_b/frontier_plot.png" width="620" style="max-width:100%;" />
+<img loading="lazy" src="https://raw.githubusercontent.com/aaholmes/llms/main/experiments/stage_b/frontier_plot.png" width="620" style="max-width:100%;" />
 
 *PyTorch · Triton*
 
@@ -58,7 +58,7 @@ Self-play engines like AlphaZero learn everything from scratch, including positi
 
 It's really a **reward-shaping** project. Instead of rewarding only terminal positions like checkmate, it rewards any position an exact method can settle — a forced mate in N moves. The training signal gets denser, and unlike a learned reward model it cannot be gamed. The result: **~600 Elo above an identically-trained purely neural run, reached in 18 generations rather than 28.**
 
-<img src="https://raw.githubusercontent.com/aaholmes/neurosymbolic-mcts/main/tournament_results_800eval_elo_plot.png" width="620" style="max-width:100%;" />
+<img loading="lazy" src="https://raw.githubusercontent.com/aaholmes/neurosymbolic-mcts/main/tournament_results_800eval_elo_plot.png" width="620" style="max-width:100%;" />
 
 *Elo across self-play generations for both runs, evaluated at 800 rollouts per move.*
 
@@ -70,7 +70,7 @@ The same split, applied to proofs: a deterministic engine grinds out every deduc
 
 Deduction alone solves 179 of the 231 problems in AlphaGeometry's JGEX benchmark. Adding the network's construction proposals takes it to **189/231**, and the problems it adds are the ones that need a genuine idea — Morley's theorem and the nine-point circle among them.
 
-<img src="geoprover_proof.png" width="560" style="max-width:100%;" />
+<img loading="lazy" src="geoprover_proof.png" width="560" style="max-width:100%;" />
 
 *A solved problem: given the black configuration, prove four points lie on a common circle. Blue dashed lines are the auxiliary constructions; green is the goal relation, proved.*
 
@@ -88,9 +88,9 @@ Congestion was the binding constraint, and no differentiable congestion model he
 
 In an open challenge — 17 benchmarks, one hour of compute each — it scored **34% below the reference placements**, good for at least 4th, with zero overlaps and on hardware slower than the rules allowed. Full [write-up](/projects/macro-placement/), including a paired-experiment appendix of what didn't work.
 
-<img src="https://raw.githubusercontent.com/aaholmes/macro-placer/master/notes/opt_ibm18.gif" width="480" style="max-width:100%;" />
+<img loading="lazy" src="macro_placement.gif" width="1001" style="max-width:100%;" />
 
-*Annealed local search using the exact objective, ibm18.*
+*One complete run on ibm18: the layout as it spreads, legalizes and improves (left), and the score per frame, with the reference placement marked (right).*
 
 *PyTorch · GPU · Simulated Annealing*
 
@@ -104,9 +104,13 @@ Often you don't want the single best solution but a diverse set of good ones —
 
 Optimal multi-robot navigation, and the same split again: Conflict-Based Search plans globally optimal, collision-free paths up front, while Optimal Reciprocal Collision Avoidance handles what the plan can't anticipate in real time. Exact where you can be, reactive where you must be. Python bindings via PyO3; 176 tests covering the search and collision-geometry guarantees.
 
-<img src="pathplanning.gif" width="420" style="max-width:100%;" />
+<img loading="lazy" src="cbs_orca_crossing.gif" width="878" style="max-width:100%;" />
 
-*Eight agents crossing a maze, each holding to its planned route while reacting locally to the others.*
+*Both layers at once. Dashed lines are the CBS plans; a red ring marks an agent whose velocity is being deflected by ORCA, with a gray arrow showing the velocity it wanted.*
+
+<img loading="lazy" src="orca_circle.gif" width="830" style="max-width:100%;" />
+
+*The signature experiment from the ORCA paper: twelve agents on a circle, each heading to the antipodal point, with no global planner at all. Pure local avoidance resolves the twelve-way encounter into the characteristic rotating vortex.*
 
 *Rust · PyO3 · CBS · ORCA*
 
@@ -116,7 +120,7 @@ Optimal multi-robot navigation, and the same split again: Conflict-Based Search 
 
 My Ph.D. work introduced Heat-Bath Configuration Interaction ([Holmes et al., *JCTC* 2016](https://arxiv.org/pdf/1606.07453)) and its semistochastic extension ([Sharma, Holmes et al., *JCTC* 2017](https://arxiv.org/pdf/1610.06660)). The prior state of the art generated enormous numbers of candidate configurations and tested each one to see if it mattered. These methods use the structure of the interaction itself to jump straight to the significant ones, then recover the remainder by sampling. The selection repeats, each round expanding the space searched exactly, which made calculations that had been out of reach routine.
 
-<img src="hci_screening.png" width="600" style="max-width:100%;" />
+<img loading="lazy" src="hci_screening.png" width="600" style="max-width:100%;" />
 
 *Finding the important terms without generating them all. The matrix elements are computed once up front and stored in descending order of magnitude; for each candidate the algorithm walks that sorted list only until it falls below a threshold that adapts to the current coefficient, then stops. Blue gets generated, green is never touched — and the test costs constant time. Figure from [Smith, Mussard, Holmes & Sharma, *JCTC* 2017](https://doi.org/10.1021/acs.jctc.7b00900) (open access).*
 
