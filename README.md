@@ -8,9 +8,9 @@
 
 Hi! I'm a computational physicist and AI researcher (Ph.D. Theoretical Physics, Cornell). I work on hard search problems — where the space of possibilities is far too large to enumerate, and the whole game is deciding what to look at next.
 
-My approach has been the same for fifteen years: **solve as much of the problem as you can with efficient exact methods, and fall back on learned or statistical ones for the remainder.** The exact layer reduces what has to be learned, and improves the training signal for what's left.
+A common thread in my work has always been an approach to such problems: **solve as much of it as you can with efficient exact methods, and fall back on learned or statistical ones for the remainder.** The exact layer reduces what has to be learned, and improves the training signal for what's left.
 
-I developed this idea in quantum chemistry. A molecule's electron configurations form a graph that grows exponentially with its size, far too large to store for anything but toy problems. The method I developed during my Ph.D. (SHCI, 2,300+ citations) uses a cheap heuristic to find the small fraction of that graph that matters, searches that part exactly, and estimates the rest by sampling. It's now a standard method in the field, and the calculations I ran with it are reference benchmarks that newer neural network and quantum computing methods are compared against.
+I first took this approach in quantum chemistry. A molecule's electron configurations form a graph that grows exponentially with its size, far too large to store for anything but toy problems. The method I developed during my Ph.D. (SHCI, 2,300+ citations) uses a cheap heuristic to find the small fraction of that graph that matters, searches that part exactly, and estimates the rest by sampling. It's now a standard method in the field, and the calculations I ran with it are reference benchmarks that newer neural network and quantum computing methods are compared against.
 
 Since then I've worked on large language model efficiency, game playing, theorem proving, and chip design. Along the way I've built production AI systems since 2018 (Transformer-based semantic search, pre-BERT), run my algorithms on some of the largest supercomputers in the world at Lawrence Livermore, and built quantitative models for systematic trading at Citadel.
 
