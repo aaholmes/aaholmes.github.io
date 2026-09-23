@@ -22,7 +22,7 @@ Since then I've worked on large language model efficiency, game playing, theorem
 
 Inference is bottlenecked by memory movement: the model re-reads a large cache for every token it generates. Every way of shrinking that cache is lossy, so the question is how much quality you buy back.
 
-### [Sampling-Based Attention](https://github.com/aaholmes/semistoch_attn)
+### [Sampling-Based Attention](https://github.com/aaholmes/stochastic-attention)
 
 Attention is a weighted average — an expectation — so it can be estimated by importance sampling instead of reading the whole cache. I implemented the unbiased estimators and measured them in a real model: systematic sampling matches full-model quality while reading **~3.5% of cached values**, and the fraction shrinks as context grows, since attention concentrates further with length.
 
