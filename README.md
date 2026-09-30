@@ -14,41 +14,16 @@ I'm now looking for a role in AI research or systems engineering at an establish
 
 ---
 
-## Neurosymbolic AI
-
-### [Neurosymbolic Chess Engine](https://github.com/aaholmes/neurosymbolic-mcts)
-
-<div class="proj" markdown="1">
-<div class="txt" markdown="1">
-
-Self-play engines like AlphaZero learn everything from scratch, including positions a classical solver settles in microseconds. I developed an engine that searches classically first, and rewards any position an exact method can settle, such as a forced mate in N moves, rather than only checkmate. The training signal is denser, and unlike a learned reward model it cannot be gamed. It reaches **~600 Elo above an identically-trained purely neural run, in 18 generations rather than 28.**
-
-*Rust · Monte Carlo Tree Search · PyTorch*
-
-</div>
-<figure markdown="1">
-
-<img loading="lazy" src="chess_elo.png" alt="Elo rating by training generation for the neurosymbolic and purely neural runs" />
-
-*Elo by training generation for both runs, with 95% bootstrap intervals, from an 18-model tournament of 6,579 games.*
-
-</figure>
-</div>
-
----
-
 ## Large Language Models
 
 Inference is bottlenecked by memory movement: for every token it generates, the model re-reads its key–value (KV) cache, the stored attention inputs for all earlier tokens. Every way of shrinking that cache is lossy, so the question is how much quality you buy back.
 
-### [Sparse KV-Cache Reads](https://github.com/aaholmes/stochastic-attention)
+### [Sparse KV-Cache Reads](https://github.com/aaholmes/sparse-kv-reads)
 
 <div class="proj" markdown="1">
 <div class="txt" markdown="1">
 
 SANTA, a recent sampling method for attention, avoids most reads of the cached values but still reads part of every key. I developed `sphere_skip`, which groups cached keys by direction into regions with small running summaries, scores the regions from those summaries alone, and reads only the top ones exactly, with GPU kernels in my own Qwen3 inference engine. On Qwen3-4B at 8,192-token context it matches 64-sample SANTA-style sampling while reading about a quarter as much of the cache (13.1% vs 50.5% of rows). At 32,768 tokens, reading 20% of the cache at similar fidelity, decoding is 1.30× faster on Qwen3-4B and 1.81× faster on Qwen3-0.6B. It is close in spirit to ClusterKV, which groups keys by k-means clustering; here the regions come from fixed directions and update incrementally.
-
-Filling in the skipped regions by sampling, as in the semistochastic methods from my Ph.D. work, removes the bias but loses at equal reads, with 24–54% higher error, because the attention left over is spread too thinly over too many regions to sample well.
 
 *PyTorch · Triton*
 
@@ -69,6 +44,29 @@ I studied converting a trained model's attention to a compressed form, multi-hea
 To recover the quality lost to compression, I train a small adapter that pulls the model's output distribution back toward the original's. Targeting the **total-variation distance** between the exact and approximate token distributions beats the standard Kullback–Leibler (KL) objective on every fidelity measure. The adapter merges into the weights, so it costs nothing at inference.
 
 *PyTorch · Triton*
+
+---
+
+## Neurosymbolic AI
+
+### [Neurosymbolic Chess Engine](https://github.com/aaholmes/neurosymbolic-mcts)
+
+<div class="proj" markdown="1">
+<div class="txt" markdown="1">
+
+Self-play engines like AlphaZero learn everything from scratch, including positions a classical solver settles in microseconds. I developed an engine that searches classically first, and rewards any position an exact method can settle, such as a forced mate in N moves, rather than only checkmate. The training signal is denser, and unlike a learned reward model it cannot be gamed. It reaches **~600 Elo above an identically-trained purely neural run, in 18 generations rather than 28.**
+
+*Rust · Monte Carlo Tree Search · PyTorch*
+
+</div>
+<figure markdown="1">
+
+<img loading="lazy" src="chess_elo.png" alt="Elo rating by training generation for the neurosymbolic and purely neural runs" />
+
+*Elo by training generation for both runs, with 95% bootstrap intervals, from an 18-model tournament of 6,579 games.*
+
+</figure>
+</div>
 
 ---
 
