@@ -19,3 +19,19 @@
 @media (max-width: 720px) {
   .proj { grid-template-columns: 1fr; }
 }
+
+// Dark mode, following the visitor's system setting
+@media (prefers-color-scheme: dark) {
+  :root { color-scheme: dark; }
+  body { color: #e6edf3; background-color: #0d1117; }
+  a { color: #4493f8; }
+  .markdown-body h1, .markdown-body h2 { border-bottom-color: #30363d; }
+  .markdown-body hr { background-color: #30363d; }
+  .markdown-body blockquote { color: #9198a1; border-left-color: #30363d; }
+  .markdown-body code, .markdown-body tt { background-color: rgba(110, 118, 129, 0.4); }
+  .markdown-body pre, .markdown-body .highlight pre { background-color: #151b23; }
+  .markdown-body table th, .markdown-body table td { border-color: #30363d; }
+  .markdown-body table tr { background-color: #0d1117; border-top-color: #30363d; }
+  .markdown-body table tr:nth-child(2n) { background-color: #151b23; }
+  .links, .proj figure p { color: #9198a1; }
+}
