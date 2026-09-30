@@ -126,6 +126,26 @@ The chromium dimer is harder — not because it is bigger, but because an unusua
 
 ---
 
+## Tools
+
+Small tools I built for my own workflow; both are open source.
+
+### [butwhy.nvim](https://github.com/aaholmes/butwhy.nvim)
+
+One of my favorite uses of large language models (LLMs) is helping me understand things. I built a plugin for the Neovim text editor that explains any text I highlight, whether prose, code, or a LaTeX equation, in a pop-up beneath it, pitched to a short description of my background. If that's still unclear, asking "but why?" re-explains it one level simpler, as many times as needed. It works with hosted or local models.
+
+<img loading="lazy" src="butwhy_demo.gif" alt="Selecting a line of NumPy code, explaining it, then asking for simpler explanations twice" width="830" style="max-width:100%;" />
+
+### [picat](https://github.com/aaholmes/picat)
+
+I often do remote development work, sometimes over slow coffee-shop Wi-Fi, and like to view images on the remote machine without copying them locally first. So I built picat (progressive icat, after the image viewer built into the kitty terminal), which shows a blurry preview immediately and then sharpens it, sending the most detailed parts first. Over a 10 Mbit/s link, a 3024×4032 photo, scaled to fit a 1000×1400-pixel window, is sharp in 0.8 s, where kitty's own viewer shows nothing until 4.1 s. The command prompt becomes available again as soon as the first preview appears, and the rest of the image loads in the background without interfering with typing responsiveness.
+
+<img loading="lazy" src="picat_vs_icat.gif" alt="kitten icat and picat side by side, showing the same photo over a 10 Mbit/s link" width="830" style="max-width:100%;" />
+
+<br>
+
+---
+
 #### Contact
 
 I'm always happy to chat about research, projects, or opportunities. Reach me via [email](mailto:adamaholmes@gmail.com) or on [LinkedIn](https://www.linkedin.com/in/adamaholmes/).
