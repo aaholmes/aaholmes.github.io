@@ -8,6 +8,8 @@ A common thread in my work has always been an approach to such problems: **solve
 
 I started in quantum many-body physics, inventing new deterministic, stochastic, and semistochastic algorithms for high-precision first-principles calculations, using only the fundamental laws of quantum mechanics (2,400+ citations). Since then I've worked on large language model (LLM) efficiency, game playing, theorem proving, and chip design. Along the way I've built production AI systems since 2018 (Transformer-based semantic search, before Google's BERT model made the approach standard), run my algorithms on some of the largest supercomputers in the world at Lawrence Livermore, and built quantitative models for systematic trading at Citadel.
 
+I'm now looking for a role in AI research or systems engineering at an established or early-stage AI lab.
+
 <br clear="all" />
 
 ---
@@ -26,22 +28,11 @@ The semistochastic version from my Ph.D. work (largest weights exact, the rest s
 
 ### [Inference Engine + Post-hoc MLA](https://github.com/aaholmes/llms)
 
-<div class="proj" markdown="1">
-<div class="txt" markdown="1">
-
 I studied converting a trained model's attention to a compressed form, multi-head latent attention (MLA), *after* training, using a from-scratch single-GPU inference engine I wrote for Qwen3, Alibaba's open-weight model family.
 
 To recover the quality lost to compression, I train a small adapter that pulls the model's output distribution back toward the original's. Targeting the **total-variation distance** between the exact and approximate token distributions beats the standard Kullback–Leibler (KL) objective on every fidelity measure. The adapter merges into the weights, so it costs nothing at inference.
 
 *PyTorch · Triton*
-
-</div>
-<figure markdown="1">
-
-<img loading="lazy" src="https://raw.githubusercontent.com/aaholmes/llms/main/experiments/stage_b/frontier_plot.png" />
-
-</figure>
-</div>
 
 ### [NanoGPT Single-GPU Harness](https://github.com/aaholmes/nanogpt-1gpu)
 
@@ -65,9 +56,9 @@ Self-play engines like AlphaZero learn everything from scratch, including positi
 </div>
 <figure markdown="1">
 
-<img loading="lazy" src="https://raw.githubusercontent.com/aaholmes/neurosymbolic-mcts/main/tournament_results_800eval_elo_plot.png" />
+<img loading="lazy" src="chess_elo.png" alt="Elo rating by training generation for the neurosymbolic and purely neural runs" />
 
-*Elo across self-play generations for both runs, evaluated at 800 rollouts per move.*
+*Elo by training generation for both runs, with 95% bootstrap intervals, from an 18-model tournament of 6,579 games.*
 
 </figure>
 </div>
@@ -89,9 +80,7 @@ I built a prover in which a deterministic engine applies 49 deduction rules unti
 
 Where a chip's large memory blocks (macros) sit largely sets the speed, power, and routability of everything placed after them. I built a GPU placer that runs a smooth global optimization of a differentiable proxy, legalizes the result, then refines it by simulated annealing using the full, non-differentiable score. Both stages use a from-scratch reimplementation of the scorer that matches the official metric exactly and runs 50–3600× faster.
 
-Congestion was the binding constraint, and no differentiable congestion model helped, even one correlating 0.995 with the true metric. What worked was aiming the annealing *proposals* at congestion instead, e.g. moving one block a single grid cell so a whole wire route leaves a congested line. **The heuristics only decide where to look; acceptance always uses the real score.**
-
-I entered it in an open challenge (17 benchmarks, one hour of compute each), where it scored **34% below the reference placements**, at least 4th place, with zero overlaps and on slower hardware than the rules allowed. [Full write-up](/projects/macro-placement/).
+Congestion was the binding constraint, and no differentiable congestion model helped, even one correlating 0.995 with the true metric. What worked was aiming the annealing *proposals* at congested regions, while always accepting moves by the real score. I entered it in an open challenge (17 benchmarks, one hour of compute each), where it scored **34% below the reference placements**, at least 4th place, with zero overlaps. [Full write-up](/projects/macro-placement/).
 
 *PyTorch · GPU · Simulated Annealing*
 
@@ -139,11 +128,7 @@ I built a two-layer system for optimal multi-robot navigation. A global planner 
 
 I like to think of quantum many-body physics as a graph search problem, but an unusually challenging one because it is a graph too large to even store! The nodes are electron configurations, and a molecule's state is a weighted combination of them. Earlier methods generated enormous numbers of candidate configurations and tested each one. During my Ph.D. I developed a physics-informed heuristic that jumps straight to the ones that matter, called Heat-Bath Configuration Interaction, or HCI ([Holmes et al., *JCTC* 2016](https://arxiv.org/pdf/1606.07453)). "Configuration interaction" is the field's term for representing a state this way; "heat-bath" names the sampling algorithm I had invented earlier, which the heuristic comes from.
 
-With my colleagues I then removed the memory bottleneck in perturbation theory, the step that accounts for configurations left out, by pairing a deterministic approximation built on that heuristic with stochastic sampling that corrects it ([Sharma, Holmes et al., *JCTC* 2017](https://arxiv.org/pdf/1610.06660)). Together these became Semistochastic HCI (SHCI), now a benchmark algorithm in electronic structure theory.
-
-For the carbon dimer we mapped fourteen low-lying electronic states across their full range of bond lengths, in a space of ~**10²¹** configurations, landing 30–50× closer to the exact answer for that basis than chemical accuracy (1 kcal/mol, the error below which a calculation predicts chemistry reliably) requires ([Holmes et al., *JCP* 2017](https://pubs.aip.org/aip/jcp/article/147/16/164111/76673)). It has become a reference calculation for quantum computing and neural-network methods.
-
-The chromium dimer is harder: many configurations contribute meaningfully simultaneously, so the set that matters is far larger and harder to find, and most methods fail badly. We computed a near-exact binding curve for it near the basis-set limit, in a space of ~**10⁴²** configurations ([Li, Yao, Holmes et al., *Phys. Rev. Res.* 2020](https://journals.aps.org/prresearch/pdf/10.1103/PhysRevResearch.2.012015)). SHCI is implemented in major quantum chemistry packages.
+With my colleagues I then removed the memory bottleneck in perturbation theory, the step that accounts for configurations left out, by pairing a deterministic approximation built on that heuristic with stochastic sampling that corrects it ([Sharma, Holmes et al., *JCTC* 2017](https://arxiv.org/pdf/1610.06660)). Together these became Semistochastic HCI (SHCI), now a benchmark algorithm in electronic structure theory, implemented in major quantum chemistry packages. With it we computed near-exact energy curves for fourteen states of the carbon dimer (~**10²¹** configurations), now a reference for quantum computing and neural-network methods. We also computed a near-exact binding curve for the chromium dimer (~**10⁴²** configurations), where most methods fail badly ([Li, Yao, Holmes et al., *Phys. Rev. Res.* 2020](https://journals.aps.org/prresearch/pdf/10.1103/PhysRevResearch.2.012015)).
 
 </div>
 <figure markdown="1">
@@ -154,6 +139,14 @@ The chromium dimer is harder: many configurations contribute meaningfully simult
 
 </figure>
 </div>
+
+### Selected papers
+
+- **Semistochastic projector Monte Carlo method.** F. R. Petruzielo, **A. A. Holmes**, H. J. Changlani, M. P. Nightingale, C. J. Umrigar. *Phys. Rev. Lett.* 2012. [doi](https://doi.org/10.1103/PhysRevLett.109.230201)<br>Introduces semistochastic methods, making a stochastic method 1000× more efficient by solving deterministically a small subproblem where sampling would otherwise fluctuate most.
+- **Efficient heat-bath sampling in Fock space.** **A. A. Holmes**, H. J. Changlani, C. J. Umrigar. *J. Chem. Theory Comput.* 2016. [doi](https://doi.org/10.1021/acs.jctc.5b01170)<br>Factors the probability of moving two electrons at once into separate probabilities for choosing each electron and each target orbital, which can be approximated and precomputed, sampling 50× more efficiently than the uniform sampling used before.
+- **Heat-bath configuration interaction.** **A. A. Holmes**, N. M. Tubman, C. J. Umrigar. *J. Chem. Theory Comput.* 2016. [doi](https://doi.org/10.1021/acs.jctc.6b00407)<br>Replaces generating and testing candidate configurations with a heuristic that goes straight to the important ones.
+- **Semistochastic heat-bath configuration interaction.** S. Sharma, **A. A. Holmes**, G. Jeanmairet, A. Alavi, C. J. Umrigar. *J. Chem. Theory Comput.* 2017. [doi](https://doi.org/10.1021/acs.jctc.6b01028)<br>Removes the memory bottleneck in the perturbative correction by splitting it into a deterministic part and a sampled part.
+- **Excited states using semistochastic heat-bath configuration interaction.** **A. A. Holmes**, C. J. Umrigar, S. Sharma. *J. Chem. Phys.* 2017. [doi](https://doi.org/10.1063/1.4998614)<br>Introduces a more accurate way to extrapolate to the exact answer, and a benchmark of high-precision excited-state energy curves for the carbon dimer.
 
 <br>
 
