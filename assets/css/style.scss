@@ -1,0 +1,21 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+.links { color: #59636e; }
+
+.proj {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 40%;
+  gap: 24px;
+  align-items: start;
+}
+.proj .txt { min-width: 0; }
+.proj figure { margin: 0; min-width: 0; }
+.proj figure img { width: 100%; height: auto; }
+.proj figure p { font-size: 13px; color: #59636e; }
+
+@media (max-width: 720px) {
+  .proj { grid-template-columns: 1fr; }
+}
