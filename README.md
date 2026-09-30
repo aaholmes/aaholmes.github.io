@@ -41,13 +41,26 @@ Self-play engines like AlphaZero learn everything from scratch, including positi
 
 Inference is bottlenecked by memory movement: for every token it generates, the model re-reads its key–value (KV) cache, the stored attention inputs for all earlier tokens. Every way of shrinking that cache is lossy, so the question is how much quality you buy back.
 
-### [Sampling-Based Attention](https://github.com/aaholmes/stochastic-attention)
+### [Sparse KV-Cache Reads](https://github.com/aaholmes/stochastic-attention)
 
-Attention is a weighted average, so it can be estimated by importance sampling instead of reading the whole cache. With the unbiased estimators I implemented, systematic sampling matches full-model quality in Qwen3-4B at 4,096-token context while reading **~3.5% of cached values**, and the fraction shrinks as context grows.
+<div class="proj" markdown="1">
+<div class="txt" markdown="1">
 
-The semistochastic version from my Ph.D. work (largest weights exact, the rest sampled) cuts variance per sample 8–32× but reads no fewer bytes, because the graphics processor (GPU) cache already serves repeat samples of the heavily weighted tokens.
+SANTA, a recent sampling method for attention, avoids most reads of the cached values but still reads part of every key. I developed `sphere_skip`, which groups cached keys by direction into regions with small running summaries, scores the regions from those summaries alone, and reads only the top ones exactly, with GPU kernels in my own Qwen3 inference engine. On Qwen3-4B at 8,192-token context it matches 64-sample SANTA-style sampling while reading about a quarter as much of the cache (13.1% vs 50.5% of rows). At 32,768 tokens, reading 20% of the cache at similar fidelity, decoding is 1.30× faster on Qwen3-4B and 1.81× faster on Qwen3-0.6B. It is close in spirit to ClusterKV, which groups keys by k-means clustering; here the regions come from fixed directions and update incrementally.
 
-*PyTorch · Monte Carlo · Importance Sampling*
+Filling in the skipped regions by sampling, as in the semistochastic methods from my Ph.D. work, removes the bias but loses at equal reads, with 24–54% higher error, because the attention left over is spread too thinly over too many regions to sample well.
+
+*PyTorch · Triton*
+
+</div>
+<figure markdown="1">
+
+<img loading="lazy" src="sparse_kv_tvd.png" alt="Error from the exact model versus percent of the cache read, for sphere_skip and systematic sampling" />
+
+*Error versus cache reads on Qwen3-4B at 8,192 tokens, as total variation distance (TVD) from the exact model's next-token distribution, with 95% bootstrap intervals over 8 text chunks. The two sampling points use 64 and 256 samples.*
+
+</figure>
+</div>
 
 ### [Inference Engine + Post-hoc MLA](https://github.com/aaholmes/llms)
 
