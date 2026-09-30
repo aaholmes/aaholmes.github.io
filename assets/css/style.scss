@@ -5,6 +5,9 @@
 
 .links { color: #59636e; }
 
+.cite { font-size: 13px; color: #59636e; }
+.markdown-body li + li { margin-top: 10px; }
+
 // The theme pads right-aligned images and paints them white, which shows as a crescent beside the round photo
 .markdown-body img.avatar { padding: 0; background: none; }
 
@@ -36,5 +39,5 @@
   .markdown-body table th, .markdown-body table td { border-color: #30363d; }
   .markdown-body table tr { background-color: #0d1117; border-top-color: #30363d; }
   .markdown-body table tr:nth-child(2n) { background-color: #151b23; }
-  .links, .proj figure p { color: #9198a1; }
+  .links, .cite, .proj figure p { color: #9198a1; }
 }
