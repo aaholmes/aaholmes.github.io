@@ -1,6 +1,6 @@
 <p class="links"><a href="mailto:adamaholmes@gmail.com">adamaholmes@gmail.com</a> · <a href="https://scholar.google.com/citations?user=K0CAVroAAAAJ">Google Scholar</a> · <a href="https://github.com/aaholmes/">GitHub</a> · <a href="https://www.linkedin.com/in/adamaholmes/">LinkedIn</a></p>
 
-<img src="profile_pic.png" alt="Adam Holmes" width="160" align="right" style="margin-left: 16px; border-radius: 50%;" />
+<img class="avatar" src="profile_pic.png" alt="Adam Holmes" width="160" align="right" style="margin-left: 16px; border-radius: 50%;" />
 
 Hi! I'm a computational physicist and AI researcher (Ph.D. Theoretical Physics, Cornell). I work on hard search problems — where the space of possibilities is far too large to enumerate, and the whole game is deciding what to look at next.
 
@@ -73,14 +73,14 @@ I built a prover in which a deterministic engine applies 49 deduction rules unti
 
 ## Search & Optimization
 
-### [GPU Macro Placement](https://github.com/aaholmes/macro-placer)
+### [Electronic Design Automation](https://github.com/aaholmes/macro-placer)
 
 <div class="proj" markdown="1">
 <div class="txt" markdown="1">
 
-Where a chip's large memory blocks (macros) sit largely sets the speed, power, and routability of everything placed after them. I built a GPU placer that runs a smooth global optimization of a differentiable proxy, legalizes the result, then refines it by simulated annealing using the full, non-differentiable score. Both stages use a from-scratch reimplementation of the scorer that matches the official metric exactly and runs 50–3600× faster.
+The arrangement of a chip's large memory blocks (macros) largely determines the speed, power, and routability of everything placed after them. I built a macro placer that runs on the GPU. The goal is to optimize a function of wirelength, density (how crowded the blocks are), and congestion (how crowded the wiring is), but only the first two can be written as differentiable scores. So the placer works in two stages: it optimizes wirelength and density by gradient descent, legalizes the result so that no blocks overlap, then runs simulated annealing using the full score, including congestion.
 
-Congestion was the binding constraint, and no differentiable congestion model helped, even one correlating 0.995 with the true metric. What worked was aiming the annealing *proposals* at congested regions, while always accepting moves by the real score. I entered it in an open challenge (17 benchmarks, one hour of compute each), where it scored **34% below the reference placements**, at least 4th place, with zero overlaps. [Full write-up](/projects/macro-placement/).
+After extensive Bayesian optimization of the hyperparameters, I found that the gradient stage works best when it optimizes wirelength alone at first and only gradually adds the density term, which is why the blocks in the animation collapse together and then slowly spread out. I ran it on a public challenge's 17 benchmarks, with one hour of compute each, after the challenge had closed. It scored **33% better than RePlAce**, a standard placement algorithm, with zero overlaps, which would have placed 4th. [Full write-up](/projects/macro-placement/).
 
 *PyTorch · GPU · Simulated Annealing*
 

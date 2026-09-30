@@ -5,6 +5,9 @@
 
 .links { color: #59636e; }
 
+// The theme pads right-aligned images and paints them white, which shows as a crescent beside the round photo
+.markdown-body img.avatar { padding: 0; background: none; }
+
 .proj {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 40%;
