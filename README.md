@@ -20,21 +20,21 @@ Since then I've worked on large language model efficiency, game playing, theorem
 
 ## Large Language Models
 
-Inference is bottlenecked by memory movement: the model re-reads a large cache for every token it generates. Every way of shrinking that cache is lossy, so the question is how much quality you buy back.
+Inference is bottlenecked by memory movement: for every token it generates, the model re-reads its key–value (KV) cache, the stored attention inputs for all earlier tokens. Every way of shrinking that cache is lossy, so the question is how much quality you buy back.
 
 ### [Sampling-Based Attention](https://github.com/aaholmes/stochastic-attention)
 
-Attention is a weighted average — an expectation — so it can be estimated by importance sampling instead of reading the whole cache. I implemented the unbiased estimators and measured them in a real model: systematic sampling matches full-model quality while reading **~3.5% of cached values**, and the fraction shrinks as context grows, since attention concentrates further with length.
+Attention is a weighted average, so it can be estimated by importance sampling instead of reading the whole cache. With the unbiased estimators I implemented, systematic sampling matches full-model quality in a real model while reading **~3.5% of cached values**, and the fraction shrinks as context grows.
 
-I also tried the semistochastic version from my Ph.D. work — treat the largest weights exactly, sample the rest. It cuts variance per sample by 8–32×, and ties on bytes. Sampling with replacement already collides onto the hot tokens, and the GPU serves the repeats out of cache, so the deterministic head buys nothing you weren't getting for free.
+The semistochastic version from my Ph.D. work (largest weights exact, the rest sampled) cuts variance per sample 8–32× but reads no fewer bytes, because the GPU cache already serves repeat samples of the heavily weighted tokens.
 
 *PyTorch · Monte Carlo · Importance Sampling*
 
 ### [Inference Engine + Post-hoc MLA](https://github.com/aaholmes/llms)
 
-A from-scratch single-GPU inference engine for Qwen3, and a study of converting a trained model's attention to a compressed form *after* training (multi-head → multi-head latent attention). Shrinking the KV cache 1.33× costs 0.5% quality relative to a matched-budget control; **4× costs 16%**.
+I wrote a from-scratch single-GPU inference engine for Qwen3, Alibaba's open-weight model family, and studied converting a trained model's attention to a compressed form, multi-head latent attention (MLA), *after* training.
 
-To claw back the loss I train a small adapter to pull the degraded model back toward the original's output distribution, targeting **total-variation distance** — the divergence that actually cashes out in sampled tokens — which beats the standard KL objective on every fidelity measure. The adapter merges into the weights, so it costs nothing at inference.
+To recover the quality lost to compression, I train a small adapter that pulls the model's output distribution back toward the original's. Targeting the **total-variation distance** between the exact and approximate token distributions beats the standard Kullback–Leibler (KL) objective on every fidelity measure. The adapter merges into the weights, so it costs nothing at inference.
 
 <img loading="lazy" src="https://raw.githubusercontent.com/aaholmes/llms/main/experiments/stage_b/frontier_plot.png" width="620" style="max-width:100%;" />
 
@@ -42,7 +42,7 @@ To claw back the loss I train a small adapter to pull the degraded model back to
 
 ### [NanoGPT Single-GPU Harness](https://github.com/aaholmes/nanogpt-1gpu)
 
-A single-GPU (16 GB) adaptation of the [modded-nanogpt speedrun](https://github.com/KellerJordan/modded-nanogpt) for screening architecture changes cheaply. A research **harness, not a benchmark** — the value is in the rankings, and in a methodology built not to fool itself: paired same-seed comparisons, per-variant learning-rate matching, and an assertion that every weight actually trains, all CI-enforced.
+A single-GPU (16 GB) adaptation of the [modded-nanogpt speedrun](https://github.com/KellerJordan/modded-nanogpt), a community race to train a small GPT model fastest, for screening architecture changes cheaply. It is a research **harness, not a benchmark**: paired same-seed comparisons, per-variant learning-rate matching, and a check that every weight actually trains are all enforced by continuous integration (CI).
 
 *PyTorch · Muon · NorMuon*
 
@@ -50,13 +50,9 @@ A single-GPU (16 GB) adaptation of the [modded-nanogpt speedrun](https://github.
 
 ## Neurosymbolic AI
 
-Push as much of the problem as possible onto exact computation, and learn only the residual.
-
 ### [Neurosymbolic Chess Engine](https://github.com/aaholmes/neurosymbolic-mcts)
 
-Self-play engines like AlphaZero learn everything from scratch, including positions a classical solver settles in microseconds. This one searches classically first and treats that answer as exact, so the network only spends capacity where the classical layer can't decide.
-
-It's really a **reward-shaping** project. Instead of rewarding only terminal positions like checkmate, it rewards any position an exact method can settle — a forced mate in N moves. The training signal gets denser, and unlike a learned reward model it cannot be gamed. The result: **~600 Elo above an identically-trained purely neural run, reached in 18 generations rather than 28.**
+Self-play engines like AlphaZero learn everything from scratch, including positions a classical solver settles in microseconds. This engine searches classically first, and rewards any position an exact method can settle, such as a forced mate in N moves, rather than only checkmate. The training signal is denser, and unlike a learned reward model it cannot be gamed. It reaches **~600 Elo above an identically-trained purely neural run, in 18 generations rather than 28.**
 
 <img loading="lazy" src="https://raw.githubusercontent.com/aaholmes/neurosymbolic-mcts/main/tournament_results_800eval_elo_plot.png" width="620" style="max-width:100%;" />
 
@@ -66,9 +62,7 @@ It's really a **reward-shaping** project. Instead of rewarding only terminal pos
 
 ### [Geometry Theorem Prover](https://github.com/aaholmes/geoprover)
 
-Exact where it can be, learned where it must be, applied to proofs: a deterministic engine grinds out every deduction it can reach (49 rules to fixed point), and a 4M-parameter transformer proposes the step deduction alone can't find — the auxiliary construction. Learning only the part that genuinely requires invention is what keeps the model that small.
-
-Deduction alone solves 179 of the 231 problems in AlphaGeometry's JGEX benchmark. Adding the network's construction proposals takes it to **189/231**, and the problems it adds are the ones that need a genuine idea — Morley's theorem and the nine-point circle among them.
+A deterministic engine applies 49 deduction rules until nothing new follows, and a 4M-parameter transformer proposes the step deduction can't find: an auxiliary construction, such as a new point or line. Deduction alone solves 179 of the 231 problems in JGEX, a benchmark used to evaluate DeepMind's AlphaGeometry. The network's proposals raise that to **189/231**, including Morley's theorem and the nine-point circle.
 
 *Rust · PyO3 · PyTorch*
 
@@ -78,31 +72,31 @@ Deduction alone solves 179 of the 231 problems in AlphaGeometry's JGEX benchmark
 
 ### [GPU Macro Placement](https://github.com/aaholmes/macro-placer)
 
-Where a chip's large memory blocks sit on the die largely sets the speed, power, and routability of everything placed after them — a step dominated by Cadence, Synopsys, and Siemens. The method combines a smooth global optimization of a differentiable proxy with simulated annealing using the full, non-differentiable loss, with a legalization step in between. Both stages run on a from-scratch reimplementation of the scorer that matches the official metric exactly and runs 50–3600× faster.
+Where a chip's large memory blocks sit largely sets the speed, power, and routability of everything placed after them. The placer runs a smooth global optimization of a differentiable proxy, legalizes the result, then refines it by simulated annealing using the full, non-differentiable score. Both stages use a from-scratch reimplementation of the scorer that matches the official metric exactly and runs 50–3600× faster.
 
-Congestion was the binding constraint, and no differentiable congestion model helped — even one correlating 0.995 with the true metric. What worked was leaving it out of the loss and aiming the *proposals* instead: nudge one block a single grid cell so an entire wire route leaves a congested line. **The heuristics only decide where to look; acceptance always uses the real score.**
+Congestion was the binding constraint, and no differentiable congestion model helped, even one correlating 0.995 with the true metric. What worked was aiming the annealing *proposals* at congestion instead, e.g. moving one block a single grid cell so a whole wire route leaves a congested line. **The heuristics only decide where to look; acceptance always uses the real score.**
 
-In an open challenge — 17 benchmarks, one hour of compute each — it scored **34% below the reference placements**, good for at least 4th, with zero overlaps and on hardware slower than the rules allowed. Full [write-up](/projects/macro-placement/), including a paired-experiment appendix of what didn't work.
+In an open challenge (17 benchmarks, one hour of compute each) it scored **34% below the reference placements**, at least 4th place, with zero overlaps and on slower hardware than the rules allowed. [Full write-up](/projects/macro-placement/).
 
 <img loading="lazy" src="macro_placement.gif" width="1001" style="max-width:100%;" />
 
-*One complete run on ibm18: the layout as it spreads, legalizes and improves (left), and the score per frame, with the reference placement marked (right).*
+*One complete run on benchmark ibm18: the layout as it spreads, legalizes and improves (left), and the score per frame, with the reference placement marked (right).*
 
 *PyTorch · GPU · Simulated Annealing*
 
 ### [MMR-Elites](https://github.com/aaholmes/mmr-elites)
 
-Often you don't want the single best solution but a diverse set of good ones — and selecting on quality alone gives you redundancy, because the best candidates cluster together. This reformulates keeping such a set as **submodular maximization** — the class of problems where each item added is worth less the more you already have, which is exactly what makes a greedy selection near-optimal — borrowing Maximum Marginal Relevance from information retrieval: fixed O(K) memory, O(K log K) selection, and 12× better uniformity than MAP-Elites in 20-dimensional behavior spaces. Selecting a varied, high-quality subset of LLM samples is analogous — quality and diversity traded off over a fixed budget.
+Often you want a diverse set of good solutions rather than the single best, but selecting on quality alone gives redundancy, because the best candidates cluster together. MMR-Elites treats keeping such a set as **submodular maximization**, where each added item is worth less the more you already have, which makes greedy selection near-optimal. Borrowing Maximum Marginal Relevance (MMR) from information retrieval, it uses fixed O(K) memory and O(K log K) selection, and gives 12× better uniformity in 20-dimensional behavior spaces than MAP-Elites, the standard method, which keeps the best solution in each cell of a grid. Choosing a varied, high-quality subset of LLM samples is an analogous problem.
 
 *Rust · PyO3 · Python*
 
 ### [Multi-Agent Path Planning](https://github.com/aaholmes/multiagent-pathplanning)
 
-Optimal multi-robot navigation, split between an exact layer and a reactive one. A global planner computes provably optimal, collision-free routes for every robot before anything moves (Conflict-Based Search); a local controller then adjusts each robot's velocity moment to moment for whatever the plan could not anticipate (Optimal Reciprocal Collision Avoidance). Exact where you can be, reactive where you must be. Python bindings via PyO3; 176 tests covering the search and collision-geometry guarantees.
+Optimal multi-robot navigation in two layers. A global planner (Conflict-Based Search) computes provably optimal, collision-free routes for every robot before anything moves; a local controller (Optimal Reciprocal Collision Avoidance, ORCA) adjusts each robot's velocity moment to moment for whatever the plan couldn't anticipate.
 
 <img loading="lazy" src="orca_circle.gif" width="830" style="max-width:100%;" />
 
-*The signature experiment from the ORCA paper: twelve agents on a circle, each heading to the antipodal point, with no global planner at all. A red ring marks an agent whose velocity is being deflected; local avoidance alone resolves the twelve-way encounter into the characteristic rotating vortex.*
+*The test case from the ORCA paper, with local avoidance only: twelve agents on a circle each head for the opposite point. A red ring marks an agent being deflected.*
 
 *Rust · PyO3 · CBS · ORCA*
 
@@ -110,17 +104,17 @@ Optimal multi-robot navigation, split between an exact layer and a reactive one.
 
 ## Quantum Chemistry Research
 
-Modeling interacting quantum systems from first principles often entails navigating an exponentially large graph of electronic configurations. During my Ph.D. I developed an efficient algorithm for searching such graphs, using a physics-informed heuristic to keep the compute manageable, called Heat-Bath Configuration Interaction ([Holmes et al., *JCTC* 2016](https://arxiv.org/pdf/1606.07453)). "Heat-bath" refers to the heat-bath sampling algorithm I had invented earlier, which the heuristic comes from; "configuration interaction" is quantum chemistry's term for methods that represent a state as a linear combination of many electron configurations.
+I like to think of quantum many-body physics as a graph search problem — which is especially challenging since the graph has too many nodes to store! The nodes are electron configurations, and a molecule's state is a weighted combination of them. Earlier methods generated enormous numbers of candidate configurations and tested each one. During my Ph.D. I developed a physics-informed heuristic that jumps straight to the ones that matter, called Heat-Bath Configuration Interaction ([Holmes et al., *JCTC* 2016](https://arxiv.org/pdf/1606.07453)). "Configuration interaction" is the field's term for representing a state this way; "heat-bath" names the sampling algorithm I had invented earlier, which the heuristic comes from.
 
-Where the prior state of the art generated enormous numbers of candidate configurations and tested each one to see if it mattered, the heuristic jumps straight to the significant ones. Then, with my colleagues, I removed the memory bottleneck in a key component, perturbation theory, by combining an efficient deterministic approximation (built on the same heat-bath heuristic) with stochastic sampling to correct it ([Sharma, Holmes et al., *JCTC* 2017](https://arxiv.org/pdf/1610.06660)) — a *semistochastic* algorithm. Together these became Semistochastic HCI (SHCI), now a benchmark algorithm in electronic structure theory for its accuracy and efficiency.
+With my colleagues I then removed the memory bottleneck in perturbation theory, the step that accounts for configurations left out, by pairing a deterministic approximation built on that heuristic with stochastic sampling that corrects it ([Sharma, Holmes et al., *JCTC* 2017](https://arxiv.org/pdf/1610.06660)). Together these became Semistochastic HCI (SHCI), now a benchmark algorithm in electronic structure theory.
 
 <img loading="lazy" src="hci_screening.png" width="600" style="max-width:100%;" />
 
-*Finding the important terms without generating them all. The matrix elements are computed once up front and stored in descending order of magnitude; for each candidate the algorithm walks that sorted list only until it falls below a threshold that adapts to the current coefficient, then stops. Blue gets generated, green is never touched — and the test costs constant time. Figure from [Smith, Mussard, Holmes & Sharma, *JCTC* 2017](https://doi.org/10.1021/acs.jctc.7b00900) (open access).*
+*Matrix elements are precomputed and sorted by magnitude, so for each candidate the algorithm walks the list only until it drops below a threshold set by the current coefficient. Blue is generated; green is never touched. Figure from [Smith, Mussard, Holmes & Sharma, *JCTC* 2017](https://doi.org/10.1021/acs.jctc.7b00900) (open access).*
 
-The calculations that followed are the reason the method stuck. For the carbon dimer we mapped fourteen low-lying electronic states across their full range of bond lengths, in a large basis — 182 orbitals, so a space of order (182 choose 6)² ≈ **10²¹** configurations — landing within 30–50 μHa of the exact answer for that basis — 30–50× more accurate than the chemical accuracy threshold ([Holmes et al., *JCP* 2017](https://pubs.aip.org/aip/jcp/article/147/16/164111/76673)). This calculation has become a reference for modern quantum computing and neural-network based methods, because of its high accuracy across many excited states.
+For the carbon dimer we mapped fourteen low-lying electronic states across their full range of bond lengths, in a space of ~**10²¹** configurations, landing 30–50× closer to the exact answer for that basis than chemical accuracy (1 kcal/mol, the error below which a calculation predicts chemistry reliably) requires ([Holmes et al., *JCP* 2017](https://pubs.aip.org/aip/jcp/article/147/16/164111/76673)). It has become a reference calculation for quantum computing and neural-network methods.
 
-The chromium dimer is harder — not because it is bigger, but because an unusually large number of configurations contribute meaningfully at once, so the set you need is far larger and much harder to find. It's a classic case where most theoretical methods fail spectacularly. Its configuration space holds roughly **10⁴²** entries; we computed its binding curve to within a few mHa near the basis set limit ([Li, Yao, Holmes et al., *Phys. Rev. Res.* 2020](https://journals.aps.org/prresearch/pdf/10.1103/PhysRevResearch.2.012015)), without ever storing more than a vanishing fraction of them. SHCI is implemented in major quantum chemistry packages.
+The chromium dimer is harder: many configurations contribute meaningfully simultaneously, so the set that matters is far larger and harder to find, and most methods fail badly. We computed a near-exact binding curve for it near the basis-set limit, in a space of ~**10⁴²** configurations ([Li, Yao, Holmes et al., *Phys. Rev. Res.* 2020](https://journals.aps.org/prresearch/pdf/10.1103/PhysRevResearch.2.012015)). SHCI is implemented in major quantum chemistry packages.
 
 <br>
 
