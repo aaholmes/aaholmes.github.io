@@ -23,14 +23,14 @@ Inference is bottlenecked by memory movement: for every token it generates, the 
 <div class="proj" markdown="1">
 <div class="txt" markdown="1">
 
-SANTA, a recent sampling method for attention, avoids most reads of the cached values but still reads part of every key. I developed `sphere_skip`, which groups cached keys by direction into regions with small running summaries, scores the regions from those summaries alone, and reads only the top ones exactly, with GPU kernels in my own Qwen3 inference engine. On Qwen3-4B at 8,192-token context it matches 64-sample SANTA-style sampling while reading about a quarter as much of the cache (13.1% vs 50.5% of rows). At 32,768 tokens, reading 20% of the cache at similar fidelity, decoding is 1.30× faster on Qwen3-4B and 1.81× faster on Qwen3-0.6B. It is close in spirit to ClusterKV, which groups keys by k-means clustering; here the regions come from fixed directions and update incrementally.
+SANTA, a recent sampling method for attention, avoids most reads of the cached values but still reads part of every key. I developed `voronoi_skip`, which groups cached keys by their nearest fixed direction into regions (Voronoi cells on the unit sphere) with small running summaries, scores the regions from those summaries alone, and reads only the top ones exactly, with GPU kernels in my own Qwen3 inference engine. On Qwen3-4B at 8,192-token context it matches 64-sample SANTA-style sampling while reading about a quarter as much of the cache (13.1% vs 50.5% of rows). At 32,768 tokens, reading 20% of the cache at similar fidelity, decoding is 1.30× faster on Qwen3-4B and 1.81× faster on Qwen3-0.6B. It is close in spirit to ClusterKV, which groups keys by k-means clustering; here the regions come from fixed directions and update incrementally.
 
 *PyTorch · Triton*
 
 </div>
 <figure markdown="1">
 
-<img loading="lazy" src="sparse_kv_tvd.png" alt="Error from the exact model versus percent of the cache read, for sphere_skip and systematic sampling" />
+<img loading="lazy" src="sparse_kv_tvd.png" alt="Error from the exact model versus percent of the cache read, for voronoi_skip and systematic sampling" />
 
 *Error versus cache reads on Qwen3-4B at 8,192 tokens, as total variation distance (TVD) from the exact model's next-token distribution, with 95% bootstrap intervals over 8 text chunks. The two sampling points use 64 and 256 samples.*
 
