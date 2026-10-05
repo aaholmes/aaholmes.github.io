@@ -54,7 +54,7 @@ To recover the quality lost to compression, I train a small adapter that pulls t
 <div class="proj" markdown="1">
 <div class="txt" markdown="1">
 
-Self-play engines like AlphaZero learn everything from scratch, including positions a classical solver settles in microseconds. I developed an engine that searches classically first, and rewards any position an exact method can settle, such as a forced mate in N moves, rather than only checkmate. The training signal is denser, and unlike a learned reward model it cannot be gamed. It reaches **~600 Elo above an identically-trained purely neural run, in 18 generations rather than 28.**
+Self-play engines like AlphaZero learn everything from scratch, including positions a classical solver settles in microseconds. I developed an engine that searches classically first, and rewards any position an exact method can settle, such as a forced mate in N moves, rather than only checkmate. The training signal is denser, and unlike a learned reward model it cannot be gamed. It reaches **~600 Elo stronger than an engine trained with reinforcement learning alone, in 18 generations rather than 28.**
 
 *Rust · Monte Carlo Tree Search · PyTorch*
 
