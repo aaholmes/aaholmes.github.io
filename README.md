@@ -23,14 +23,14 @@ Inference is bottlenecked by memory movement: for every token it generates, the 
 <div class="proj" markdown="1">
 <div class="txt" markdown="1">
 
-SANTA, a recent sampling method for attention, avoids most reads of the cached values but still reads part of every key. I developed `voronoi_skip`, which groups cached keys by their nearest fixed direction into regions (Voronoi cells on the unit sphere) with small running summaries, scores the regions from those summaries alone, and reads only the top ones exactly, with GPU kernels in my own Qwen3 inference engine. On Qwen3-4B at 8,192-token context it matches 64-sample SANTA-style sampling while reading about a quarter as much of the cache (13.1% vs 50.5% of rows). At 32,768 tokens, reading 20% of the cache at similar fidelity, decoding is 1.30× faster on Qwen3-4B and 1.81× faster on Qwen3-0.6B. It is close in spirit to ClusterKV, which groups keys by k-means clustering; here the regions come from fixed directions and update incrementally.
+I developed a training-free method that speeds up long-context decoding by reading only part of the KV cache: it clusters the cached keys by direction and reads only the clusters that a cheap summary score ranks highest, using GPU kernels I wrote. Reading 20% of a 32,768-token cache, attention is 3× faster than FlashInfer, used by SGLang. The idea came from reading about SANTA and MagicPIG, which sample the cache instead; to come as close to the exact model as SANTA-style sampling, it reads 8% of the cache where sampling reads 51%. It is close to ClusterKV, which also clusters keys with k-means.
 
 *PyTorch · Triton*
 
 </div>
 <figure markdown="1">
 
-<img loading="lazy" src="sparse_kv_tvd.png" alt="Error from the exact model versus percent of the cache read, for voronoi_skip and systematic sampling" />
+<img loading="lazy" src="sparse_kv_tvd.png" alt="Error from the exact model versus percent of the cache read, for this method and systematic sampling" />
 
 *Error versus cache reads on Qwen3-4B at 8,192 tokens, as total variation distance (TVD) from the exact model's next-token distribution, with 95% bootstrap intervals over 8 text chunks. The two sampling points use 64 and 256 samples.*
 
