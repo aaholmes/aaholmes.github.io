@@ -23,7 +23,7 @@ Inference is bottlenecked by memory movement: for every token it generates, the 
 <div class="proj" markdown="1">
 <div class="txt" markdown="1">
 
-I developed a training-free method that speeds up long-context decoding by reading only part of the KV cache: it clusters the cached keys by direction and reads only the clusters that a cheap summary score ranks highest, using GPU kernels I wrote. Reading 20% of a 32,768-token cache, attention is 3× faster than FlashInfer, used by SGLang. The idea came from reading about SANTA and MagicPIG, which sample the cache instead; to come as close to the exact model as SANTA-style sampling, it reads 8% of the cache where sampling reads 51%. It is close to ClusterKV, which also clusters keys with k-means.
+I built GPU kernels that speed up long-context decoding by reading only part of the KV cache: the cached keys are clustered by direction, and only the clusters that a cheap summary score ranks highest are read. I arrived at the design after reading about SANTA and MagicPIG, which sample the cache instead, and found afterwards that ClusterKV and DynaKV had already published its main ideas, so this is an independent implementation and evaluation. Reading 20% of a 32,768-token cache, attention is 3× faster than FlashInfer, used by SGLang, and on four LongBench question-answering sets accuracy is not measurably lower while reading 8–23% of the cache.
 
 *PyTorch · Triton*
 
