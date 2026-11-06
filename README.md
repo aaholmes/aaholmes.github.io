@@ -175,7 +175,7 @@ One of my favorite uses of LLMs is helping me understand things. I built a plugi
 <div class="proj" markdown="1">
 <div class="txt" markdown="1">
 
-I often do remote development work, sometimes over slow coffee-shop Wi-Fi, and like to view images on the remote machine without copying them locally first. So I built picat (progressive icat, after the image viewer built into the kitty terminal), which shows a blurry preview immediately and then sharpens it, sending the most detailed parts first. Over a 10 Mbit/s link, a 3024×4032 photo, scaled to fit a 1000×1400-pixel window, is sharp in 0.8 s, where kitty's own viewer shows nothing until 4.1 s.
+I often do remote development work, sometimes over slow coffee-shop Wi-Fi, and like to view images on the remote machine without copying them locally first. So I built picat (progressive icat, after the image viewer built into the kitty terminal), which shows a blurry preview immediately and then sharpens it, sending the most detailed parts first. On six test images sent over a 10 Mbit/s link, picat put the first pixels on screen in 0.06–0.20 s, while kitty's own viewer showed nothing until the whole image had arrived, after 0.5–8 s. The rest of the image loads in the background at 90% of the link's measured speed, so the prompt returns right away and what I type is still echoed promptly.
 
 </div>
 <figure markdown="1">
