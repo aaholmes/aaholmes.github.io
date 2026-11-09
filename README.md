@@ -147,7 +147,7 @@ Small tools I built for my own workflow; all three are open source.
 <div class="proj" markdown="1">
 <div class="txt" markdown="1">
 
-To get up to speed in unfamiliar codebases, I built a plugin for Neovim's Telescope file finder that adds two things: a short summary of each file as I browse, written by an LLM and cached, and a chat about the repo beside the finder. To answer, the model searches and reads the code itself and cites the lines it used, and Tab steps the preview through each citation. I chose the model and prompts by measurement, writing predictions before each run. On 80 questions about 8 repos, answers from searching the code contained 79% of the facts a correct answer needs (graded by an LLM), compared with 36% from file summaries alone.
+To get up to speed in unfamiliar codebases, I built a plugin for Neovim's Telescope file finder that adds two things: a short summary of each file as I browse, written by an LLM and cached, and a chat about the repo beside the finder. To answer, the model searches and reads the code itself and cites the lines it used, and Tab steps the preview through each citation.
 
 </div>
 <figure markdown="1">
