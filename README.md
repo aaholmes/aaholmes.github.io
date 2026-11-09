@@ -23,7 +23,7 @@ Inference is bottlenecked by memory movement: for every token it generates, the 
 <div class="proj" markdown="1">
 <div class="txt" markdown="1">
 
-I built GPU kernels that speed up long-context decoding by reading only part of the KV cache: the cached keys are clustered by direction, and only the clusters that a cheap summary score ranks highest are read. I arrived at the design after reading about SANTA and MagicPIG, which sample the cache instead, and found afterwards that ClusterKV and DynaKV had already published its main ideas, so this is an independent implementation and evaluation. Reading 20% of a 32,768-token cache, attention is 3× faster than FlashInfer, used by SGLang, and on four LongBench question-answering sets accuracy is not measurably lower while reading 8–23% of the cache.
+I developed a method that speeds up long-context decoding by reading only part of the KV cache: the cached keys are clustered by direction, and only the clusters that a cheap summary score ranks highest are read. I arrived at the design after reading about SANTA and MagicPIG, which sample the cache instead, and found afterwards that ClusterKV and DynaKV had already published its main ideas, so this is an independent implementation and evaluation. Reading 20% of a 32,768-token cache, attention is 3× faster than FlashInfer, used by SGLang, and on four LongBench question-answering sets accuracy is not measurably lower while reading 8–23% of the cache.
 
 *PyTorch · Triton*
 
@@ -37,11 +37,11 @@ I built GPU kernels that speed up long-context decoding by reading only part of 
 </figure>
 </div>
 
-### [Inference Engine + Post-hoc MLA](https://github.com/aaholmes/llms)
+### [Post-hoc MLA](https://github.com/aaholmes/llms)
 
-I studied converting a trained model's attention to a compressed form, multi-head latent attention (MLA), *after* training, using a from-scratch single-GPU inference engine I wrote for Qwen3, Alibaba's open-weight model family.
+I studied converting a trained model's attention to a compressed form, multi-head latent attention (MLA), *after* training, on Qwen3-4B from Alibaba's open-weight Qwen3 family.
 
-To recover the quality lost to compression, I train a small adapter that pulls the model's output distribution back toward the original's. Targeting the **total-variation distance** between the exact and approximate token distributions beats the standard Kullback–Leibler (KL) objective on every fidelity measure. The adapter merges into the weights, so it costs nothing at inference.
+To recover the quality lost to compression, I distill the original model into the compressed one through a small low-rank adapter. Minimizing the **total variation distance** between their next-token distributions, rather than the standard Kullback–Leibler (KL) divergence, the compressed model's distribution overlaps the original's by 80%, compared with 74% using KL. The adapter merges into the weights, so it costs nothing at inference.
 
 *PyTorch · Triton*
 
@@ -51,47 +51,13 @@ To recover the quality lost to compression, I train a small adapter that pulls t
 
 ### [Neurosymbolic Chess Engine](https://github.com/aaholmes/neurosymbolic-mcts)
 
-<div class="proj" markdown="1">
-<div class="txt" markdown="1">
+Self-play engines like AlphaZero learn everything from scratch, including positions a classical solver can evaluate exactly in microseconds. I developed an engine that uses exact search wherever a solver can evaluate a position, such as a forced mate in N moves, and leaves only the rest to the neural network, so the network has less it has to learn and even the untrained engine generates useful self-play data. Network inference runs in Rust with half precision, CUDA graphs and batched calls from thousands of search threads, giving over 90% GPU utilization during self-play.
 
-Self-play engines like AlphaZero learn everything from scratch, including positions a classical solver can evaluate exactly in microseconds. I developed an engine that searches classically first, and rewards any position an exact method can evaluate, such as a forced mate in N moves, rather than only checkmate. The training signal is denser, and unlike a learned reward model it cannot be gamed. It reaches **~600 Elo stronger than an engine trained with reinforcement learning alone, in 18 generations rather than 28.**
-
-*Rust · Monte Carlo Tree Search · PyTorch*
-
-</div>
-<figure markdown="1">
-
-<img loading="lazy" src="chess_elo.png" alt="Elo rating by training generation for the neurosymbolic and purely neural runs" />
-
-*Elo by training generation for both runs, with 95% bootstrap intervals, from an 18-model tournament of 6,579 games.*
-
-</figure>
-</div>
+*Rust · Monte Carlo Tree Search · candle · PyTorch*
 
 ---
 
 ## Search & Optimization
-
-### [Electronic Design Automation](https://github.com/aaholmes/macro-placer)
-
-<div class="proj" markdown="1">
-<div class="txt" markdown="1">
-
-The arrangement of a chip's large memory blocks (macros) largely determines the speed, power, and routability of everything placed after them. I built a macro placer that runs on the GPU, to optimize a function of wirelength, density (how crowded the blocks are), and congestion (how crowded the wiring is). Only the first two can be written as differentiable scores, so the placer works in two stages: it optimizes wirelength and density by gradient descent, legalizes the result so that no blocks overlap, then runs simulated annealing using the full score, including congestion.
-
-After extensive Bayesian optimization of the hyperparameters, I found that the gradient stage works best when it optimizes wirelength alone at first and only gradually adds the density term, which is why the blocks in the animation collapse together and then slowly spread out. I ran it on a public challenge's 17 benchmarks, with one hour of compute each, after the challenge had closed. It scored **33% better than RePlAce**, a standard placement algorithm, with zero overlaps, which would have placed 4th. [Full write-up](/projects/macro-placement/).
-
-*PyTorch · GPU · Simulated Annealing*
-
-</div>
-<figure markdown="1">
-
-<img loading="lazy" src="macro_placement.gif" />
-
-*One complete run on benchmark ibm18: the layout as it spreads, legalizes and improves (left), and the score per frame, with the reference placement marked (right).*
-
-</figure>
-</div>
 
 ### [MMR-Elites](https://github.com/aaholmes/mmr-elites)
 
@@ -118,6 +84,27 @@ I built a two-layer system for optimal multi-robot navigation. A global planner 
 </figure>
 </div>
 
+### [Electronic Design Automation](https://github.com/aaholmes/macro-placer)
+
+<div class="proj" markdown="1">
+<div class="txt" markdown="1">
+
+The arrangement of a chip's large memory blocks (macros) largely determines the speed, power, and routability of everything placed after them. I built a macro placer that runs on the GPU, to optimize a function of wirelength, density (how crowded the blocks are), and congestion (how crowded the wiring is). Only the first two can be written as differentiable scores, so the placer works in two stages: it optimizes wirelength and density by gradient descent, legalizes the result so that no blocks overlap, then runs simulated annealing using the full score, including congestion.
+
+After extensive Bayesian optimization of the hyperparameters, I found that the gradient stage works best when it optimizes wirelength alone at first and only gradually adds the density term, which is why the blocks in the animation collapse together and then slowly spread out. I ran it on a public challenge's 17 benchmarks, with one hour of compute each, after the challenge had closed. It scored **33% better than RePlAce**, a standard placement algorithm, with zero overlaps, which would have placed 4th. [Full write-up](/projects/macro-placement/).
+
+*PyTorch · GPU · Simulated Annealing*
+
+</div>
+<figure markdown="1">
+
+<img loading="lazy" src="macro_placement.gif" />
+
+*One complete run on benchmark ibm18: the layout as it spreads, legalizes and improves (left), and the score per frame, with the reference placement marked (right).*
+
+</figure>
+</div>
+
 ---
 
 ## Quantum Many-Body Algorithms
@@ -125,9 +112,9 @@ I built a two-layer system for optimal multi-robot navigation. A global planner 
 <div class="proj" markdown="1">
 <div class="txt" markdown="1">
 
-I like to think of quantum many-body physics as a graph search problem, but an unusually challenging one because it is a graph too large to even store! The nodes are electron configurations, and a molecule's state is a weighted combination of them. During my Ph.D. I developed a physics-informed heuristic that finds the most important configurations directly, without first generating long lists of candidates, called Heat-Bath Configuration Interaction, or HCI ([Holmes et al., *JCTC* 2016](https://arxiv.org/pdf/1606.07453)). "Configuration interaction" is the field's term for representing a state this way. The heuristic is the deterministic analogue of the heat-bath sampling algorithm I invented previously, which is why I named the method after it.
+I like to think of quantum many-body physics as a graph search problem, but an unusually challenging one because it is a graph too large to even store! The nodes are electron configurations, and a molecule's state is a weighted combination of them. During my Ph.D. I developed a physics-informed heuristic that finds the most important configurations directly, without first generating long lists of candidates, called Heat-Bath Configuration Interaction, or HCI ([Holmes et al., *JCTC* 2016](https://arxiv.org/pdf/1606.07453)). "Configuration interaction" is the field's term for representing a state this way. The heuristic is the deterministic analogue of the heat-bath sampling algorithm I invented previously, which is why I named the algorithm after it.
 
-With my colleagues I then removed the memory bottleneck in perturbation theory, the step that accounts for configurations left out, by pairing a deterministic approximation built on that heuristic with stochastic sampling that corrects it ([Sharma, Holmes et al., *JCTC* 2017](https://arxiv.org/pdf/1610.06660)). Together these became Semistochastic HCI (SHCI), now a benchmark algorithm in electronic structure theory, implemented in major quantum chemistry packages. With it we computed near-exact energy curves for fourteen states of the carbon dimer (~**10²¹** configurations), now a reference for quantum computing and neural-network methods. We also computed a near-exact binding curve for the chromium dimer (~**10⁴²** configurations), where most methods fail badly ([Li, Yao, Holmes et al., *Phys. Rev. Res.* 2020](https://journals.aps.org/prresearch/pdf/10.1103/PhysRevResearch.2.012015)).
+We later removed the memory bottleneck in perturbation theory, the step that accounts for configurations left out, by pairing a deterministic approximation built on that heuristic with stochastic sampling that corrects it ([Sharma, Holmes et al., *JCTC* 2017](https://arxiv.org/pdf/1610.06660)). Together these became Semistochastic HCI (SHCI), now a benchmark algorithm in electronic structure theory, implemented in major quantum chemistry packages. With it we computed near-exact energy curves for fourteen states of the carbon dimer (~**10²¹** configurations), now a reference for quantum computing and neural-network methods. We also computed a near-exact binding curve for the chromium dimer (~**10⁴²** configurations), where most methods fail badly ([Li, Yao, Holmes et al., *Phys. Rev. Res.* 2020](https://journals.aps.org/prresearch/pdf/10.1103/PhysRevResearch.2.012015)).
 
 </div>
 <figure markdown="1">
@@ -153,7 +140,22 @@ With my colleagues I then removed the memory bottleneck in perturbation theory, 
 
 ## Tools
 
-Small tools I built for my own workflow; both are open source.
+Small tools I built for my own workflow; all three are open source.
+
+### [synopsis.nvim](https://github.com/aaholmes/synopsis.nvim)
+
+<div class="proj" markdown="1">
+<div class="txt" markdown="1">
+
+To get up to speed in unfamiliar codebases, I built a plugin for Neovim's Telescope file finder that adds two things: a short summary of each file as I browse, written by an LLM and cached, and a chat about the repo beside the finder. To answer, the model searches and reads the code itself and cites the lines it used, and Tab steps the preview through each citation. I chose the model and prompts by measurement, writing predictions before each run. On 80 questions about 8 repos, answers from searching the code contained 79% of the facts a correct answer needs (graded by an LLM), compared with 36% from file summaries alone.
+
+</div>
+<figure markdown="1">
+
+<img loading="lazy" src="synopsis_chat.gif" alt="Asking which files build a prompt: the chat opens beside Telescope, and Tab moves the preview through the cited files" />
+
+</figure>
+</div>
 
 ### [butwhy.nvim](https://github.com/aaholmes/butwhy.nvim)
 
